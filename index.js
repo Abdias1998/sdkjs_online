@@ -405,7 +405,7 @@
                   <div style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background-color: #e5e7eb; color: #4b5563; font-weight: bold; font-size: 12px; margin-right: 8px;">
                     1
                   </div>
-                  <h3 style="font-weight: normal; color: #112C56;font-size: 12px;">Informations Personnelles</h3>
+                  <h3 style="font-weight: normal; color: #112C56;font-size:20px;">Informations Personnelles</h3>
                 </div> 
                 
                 <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -420,7 +420,7 @@
                   <div style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background-color: #e5e7eb; color: #4b5563; font-weight: bold; font-size: 12px; margin-right: 8px;">
                     ${paymentMethodsSectionNumber}
                   </div>
-                  <h3 style="font-weight: normal; color: #112C56;">Méthodes de paiement</h3>
+                  <h3 style="font-weight: normal; color: #112C56;font-size:20px;">Méthodes de paiement</h3>
                 </div>
                 
                 <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -509,7 +509,7 @@
         cardSection.innerHTML = `
           <div style="margin-bottom: 24px;">
             <div style="display: flex; align-items: center; margin-bottom: 2px;">
-              <h3 style="font-weight: normal; color: #112C56;">Paiement par Carte Bancaire</h3>
+              <h3 style="font-weight: normal; color: #112C56;font-size:20px;">Paiement par Carte Bancaire</h3>
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -561,7 +561,7 @@
               <div style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background-color: #e5e7eb; color: #4b5563; font-weight: bold; font-size: 12px; margin-right: 8px;">
                 ${paymentMethodsSectionNumber}
               </div>
-              <h3 style="font-weight: normal; color: #112C56;">Méthodes de paiement</h3>
+              <h3 style="font-weight: normal; color: #112C56;font-size:20px;">Méthodes de paiement</h3>
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 12px;">
