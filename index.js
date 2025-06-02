@@ -409,7 +409,7 @@
                 </div> 
                 
                 <div style="display: flex; flex-direction: column; gap: 12px;">
-                  <input type="text" id="feexpay-name-input" placeholder="Nom et Prénoms" style="${hideNameField ? ' display: none;' : ''};width: 100%; height: 20px; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; outline: none;">
+                  <input type="text" id="feexpay-name-input" placeholder="Nom et Prénoms" style="width: 100%; height: 20px; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; outline: none;">
                   <input type="email" id="feexpay-email-input" placeholder="Email" style="${hideEmailField ? ' display: none;' : ''};width: 100%; height: 20px; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; outline: none;">
                 </div>
               </div>
