@@ -517,10 +517,10 @@
                 <option value="VISA">VISA</option>
                 <option value="MASTERCARD">MASTERCARD</option>
               </select>
-              <input type="text" id="feexpay-firstname-input" placeholder="Prénom" style="width: 100%; height: 20px; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; outline: none;">
-              <input type="text" id="feexpay-lastname-input" placeholder="Nom" style="width: 100%; height: 20px; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; outline: none;">
-              <input type="email" id="feexpay-card-email-input" placeholder="Email" style="width: 100%; height: 20px; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; outline: none;">
-              <input type="tel" id="feexpay-card-phone-input" placeholder="Numéro de téléphone avec indicatif" style="width: 100%; height: 20px; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; outline: none;">
+              <input type="text" id="feexpay-firstname-input" placeholder="Prénom" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 0 4px 4px 0; outline: none;">
+              <input type="text" id="feexpay-lastname-input" placeholder="Nom" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 0 4px 4px 0; outline: none;">
+              <input type="email" id="feexpay-card-email-input" placeholder="Email" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 0 4px 4px 0; outline: none;">
+              <input type="tel" id="feexpay-card-phone-input" placeholder="Numéro de téléphone avec indicatif" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 0 4px 4px 0; outline: none;">
             
             </div>
             
@@ -3027,7 +3027,7 @@
               FeexPayConfig.options.callback(callbackData);
             }
           });
-        }, 5000); // Poll every 5 seconds
+        }, 20000); // Poll every 20 seconds
       },
       
       /**
