@@ -178,8 +178,8 @@
       FeexPayConfig.styles = document.createElement('style');
       FeexPayConfig.styles.textContent = `
       @import url('https://fonts.cdnfonts.com/css/gilroy-bold');
-   @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+   
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
         .feexpay-button {
           background-color: #D45D00;
@@ -223,7 +223,9 @@
         }
         
         .feexpay-modal {
-      font-family: 'Poppins', sans-serif;
+     font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
           background-color: white;
           border-radius: 8px;
           max-width: 450px;
@@ -253,7 +255,11 @@
           vertical-align: middle;
         }
 
-         
+          h3{
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        }
         p{
         font-family: 'Poppins', sans-serif;
         font-size: 10px;
@@ -262,32 +268,23 @@
 
         h1{
         font-family: 'Gilroy-Bold', sans-serif;
-        font-size: 16px;
+        font-size: 20px;
         font-weight: 600;
         }
 
         h2{
         font-family: 'Gilroy-Bold', sans-serif;
-        font-size: 16px;
+        font-size: 18px;
         font-weight: 600;
         }
 
-         h3{
-        font-family: 'Gilroy-Bold', sans-serif;
-        font-size: 14px;
-        font-weight: 400;
-        }
         span{
         font-family: 'Poppins', sans-serif;
         font-size: 14px;
+  
         font-weight: 400;
         }
-
-        input{
-        font-family: 'Poppins', sans-serif;
-        font-size: 14px;
-        font-weight: 400;
-        }
+        
         @keyframes feexpay-spin {
           to { transform: rotate(360deg); }
         }
@@ -453,7 +450,7 @@
             </div>
             
             <!-- Payment Methods -->
-            <div id="feexpay-payment-methods" style="">
+            <div id="feexpay-payment-methods"">
               <div style="display: flex; align-items: center; margin-bottom: 2px;">
                 <div style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background-color: #e5e7eb; color: #4b5563; font-weight: bold; font-size: 12px; margin-right: 8px;">
                   ${paymentMethodsSectionNumber}
@@ -507,7 +504,7 @@
                 <span id="feexpay-mobile-fee-value" style="font-weight: 500;"></span>
               </div>
               
-              <div id="feexpay-total-display" style="display: flex; justify-content: space-between; font-weight: normal;">
+              <div id="feexpay-total-display" style="display: flex; justify-content: space-between; font-weight: 500;">
                 <span>Montant Total à payer :</span>
                 <span id="feexpay-total-label" style="font-weight: 500;">${Math.ceil(FeexPayConfig.options.amount * 1.017).toLocaleString()} ${FeexPayConfig.options.currency}</span>
               </div>
@@ -532,7 +529,7 @@
             </div>
           </div>
           
-          <div style="background-color: #f3f4f6; padding: 6px; text-align: center; font-size: 10px; color: #6b7280;">
+          <div style="background-color: #f3f4f6; padding: 6px; text-align: center; font-size: 8px; color: #6b7280;">
             <p>Paiements sécurisés par FeexPay</p>
             <p>En payant par ce plugin, vous acceptez les <a target="_blank" style="color:blue" href="https://feexpay.me/fr/terms-and-conditions">conditions générales d'utilisation</a> de FeexPay</p>
           </div>
@@ -1474,7 +1471,7 @@
         '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
         '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
       
-      const statusText = isSuccess ? 'Paiement réussi' : 'Paiement échoué';
+      const statusText = isSuccess ? 'Paiement réussi' : status === "FAILED" ? "Paiement échoué" : "Validation Erreur";
       const buttonText = isSuccess ? 'Fermer' : 'Réessayer';
       
       // Set the modal content
@@ -1540,109 +1537,74 @@ const emailDisplay = emailInput.value;
 
       // Add event listener to the button
       const resultBtn = resultModal.querySelector('#feexpay-result-btn');
+  
       if (resultBtn) {
         if (isSuccess) {
-          // For success, just close the modal
-          // resultBtn.addEventListener('click',async () => {
-            this.hideResultModal();
-        
-            // Call callback function if it hasn't been called already
-            if (typeof FeexPayConfig.options.callback === 'function' && !FeexPayConfig.callbackCalled) {
-              FeexPayConfig.options.callback({
-                reference : reference,
-                status: 'SUCCESSFUL',
-                phoneNumber : formattedPhone,
-                full_name : nameDisplay || '',
-                email : emailDisplay,
-                reseau : networkDisplay,
-                callback_info : FeexPayConfig.options.callback_info,
-                description: FeexPayConfig.options.description,
-                transaction_id : transid,
-                message :message
-              
-          
-
-                
-              });
-              
-              // Mark callback as called to prevent duplicate calls
-              FeexPayConfig.callbackCalled = true;
+          if (FeexPayConfig.options.callback_url) {
+            // Redirection automatique si callback_url est défini
+            const url = new URL(FeexPayConfig.options.callback_url);
+            if (url.searchParams && url.searchParams.toString()) {
+              FeexPayConfig.options.callback_url += `&ref=${reference}`;
+            } else {
+              FeexPayConfig.options.callback_url += `?ref=${reference}`;
             }
-            
-            // Redirect if callback URL is provided
-            // if (FeexPayConfig.options.callback_url) {
-            //   window.location.href = FeexPayConfig.options.callback_url;  // SDK JS
-            // }
-            else if ((FeexPayConfig.options.callback_url !== undefined) ) {
-              const url = new URL(FeexPayConfig.options.callback_url);
-              if (url.searchParams && url.searchParams.toString()) {
-                  FeexPayConfig.options.callback_url = FeexPayConfig.options.callback_url + '&ref=' + reference;
-              } else {
-                  FeexPayConfig.options.callback_url = FeexPayConfig.options.callback_url + '?ref=' + reference;
-              }
-              document.querySelector(`#${FeexPayConfig.containerId}`).innerHTML += ` <a
-          class="feexpay_link_pay"
-          style="display:none"
-          href="${FeexPayConfig.options.callback_url}"
-          >
-          pay
-          </a>`;
-              let pay_link = document.querySelector(".feexpay_link_pay");
-              pay_link.click();
-          }
-
-
+            window.location.href = FeexPayConfig.options.callback_url;
       
-
-          
-          // });
-        } 
-        
-        else {
-
-          
-          // For failure, retry the payment
-      
+            // Fermer la modale (optionnel si redirection immédiate)
             this.hideResultModal();
-            // Reset the payment form for retry
+          } else {
+            // Pas de redirection, donc on ferme la modale au clic sur le bouton
+            resultBtn.addEventListener('click', () => {
+              this.hideResultModal();
+            });
+          }
+      
+          // Exécuter le callback s’il n’a pas encore été fait
+          if (typeof FeexPayConfig.options.callback === 'function' && !FeexPayConfig.callbackCalled) {
+            FeexPayConfig.options.callback({
+              reference: reference,
+              status: 'SUCCESSFUL',
+              phoneNumber: formattedPhone,
+              full_name: nameDisplay || '',
+              email : emailDisplay,
+              reseau: networkDisplay,
+              callback_info: FeexPayConfig.options.callback_info,
+              description: FeexPayConfig.options.description,
+              transaction_id: transid,
+              message: message
+            });
+      
+            FeexPayConfig.callbackCalled = true;
+          }
+        } else {
+          // Paiement échoué : on attend le clic sur le bouton "Réessayer"
+          resultBtn.addEventListener('click', () => {
+            this.hideResultModal();
+      
             const payBtn = document.getElementById('feexpay-pay-btn');
             if (payBtn) {
               payBtn.textContent = 'Payer';
               payBtn.disabled = false;
             }
-            
-            // Redirect to error_callback_url if defined and status is FAILED
-            if (status === 'FAILED') {
-              const url = new URL(FeexPayConfig.options.callback_url);
-              let redirectUrl = FeexPayConfig.options.callback_url;
-              
-              // Add transaction reference as parameter if available
+      
+            if (status === 'FAILED' && FeexPayConfig.options.error_callback_url) {
+              const url = new URL(FeexPayConfig.options.error_callback_url);
+              let redirectUrl = FeexPayConfig.options.error_callback_url;
+      
               if (reference) {
                 if (url.searchParams && url.searchParams.toString()) {
-                  
-                  redirectUrl = redirectUrl + '&ref=' + reference;
+                  redirectUrl += `&ref=${reference}`;
                 } else {
-                  redirectUrl = redirectUrl + '?ref=' + reference;
+                  redirectUrl += `?ref=${reference}`;
                 }
               }
-              
-              // Create hidden link and click it to redirect
-              document.querySelector(`#${FeexPayConfig.containerId}`).innerHTML += ` <a
-                class="feexpay_error_link"
-                style="display:none"
-                href="${redirectUrl}"
-              >
-                error
-              </a>`;
-              let error_link = document.querySelector(".feexpay_error_link");
-              error_link.click();
+      
+              window.location.href = redirectUrl;
             }
-       
-
-
+          });
         }
       }
-
+      
       
       
      // Automatically call callback for success or failure without waiting for button click
@@ -1652,7 +1614,7 @@ if (typeof FeexPayConfig.options.callback === 'function' && !FeexPayConfig.callb
     status: status,
     phoneNumber : formattedPhone,
     full_name : nameDisplay || '',
-    email : emailDisplay,
+    email : emailDisplay || '',
     reseau : networkDisplay,
     callback_info : FeexPayConfig.options.callback_info,
     description: FeexPayConfig.options.description,
@@ -1848,7 +1810,7 @@ try {
         currency: FeexPayConfig.options.currency,
         merchant_domain :  window.location.origin,
         merchant_ip:ip ,
-        payment_interface : "WORDPRESS"
+        payment_interface : "JAVASCRIPT"
         // Additional fields for CORIS payments
       };
 
@@ -2323,7 +2285,7 @@ modalContent.appendChild(iframe)
         reference: '',
         merchant_domain : window.location.origin,
         merchant_ip: ip,
-        payment_interface : "WORDPRESS"
+        payment_interface : "JAVASCRIPT"
       };
       
       // Ajouter email et first_name seulement s'ils sont disponibles
