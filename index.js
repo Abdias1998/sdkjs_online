@@ -3177,7 +3177,7 @@ modalContent.appendChild(iframe)
         payBtn.disabled = true;
       }
       
-      fetch(`https://api.feexpay.me/api/transactions/public/requesttopay/wave_ci`, {
+      fetch(`${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
