@@ -1792,13 +1792,18 @@ try {
 } catch (error) {
   console.warn('Impossible de récupérer l\'IP:', error);
 }
+
+let description = FeexPayConfig.options.description
+if (networkDisplay.toUpperCase() === 'MTN') {
+  description = description.replace(/[^a-zA-Z0-9 ]/g, '');
+}
       // Prepare payment data with country code prefix for phone number
       const paymentData = {
         phoneNumber: formattedPhone,
         country: countryCode,
         phoneNumberRight: phone,
         amount: FeexPayConfig.options.amount,
-        reseau: networkApiId.toUpperCase(),
+        reseau: networkDisplay.toUpperCase(),
         shop: FeexPayConfig.options.id,
         token: FeexPayConfig.options.token,
         first_name: fullName || '',
@@ -1806,7 +1811,7 @@ try {
       custom_id : FeexPayConfig.options.custom_id,
         otp: otp, // Utilise le code OTP pour ORANGE au Sénégal
         callback_info: FeexPayConfig.options.callback_info,
-        description: FeexPayConfig.options.description || '',
+        description: description,
         currency: FeexPayConfig.options.currency,
         merchant_domain :  window.location.origin,
         merchant_ip:ip ,
@@ -1814,7 +1819,7 @@ try {
         // Additional fields for CORIS payments
       };
 
-      console.log(paymentData);
+      // console.log(paymentData);
       
       
       // Check if this is a CORIS payment
@@ -1931,7 +1936,7 @@ try {
       
       // Make API request to process payment
        
-   if(FeexPayConfig.options.mode !== "SANDBOX") {
+   if(FeexPayConfig.options.mode === "LIVE" &&  FeexPayConfig.options.token.startsWith("fp_")) {
     fetch(`${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`, {
       method: 'POST',
       headers: {
@@ -2047,11 +2052,20 @@ modalContent.appendChild(iframe)
    }
 
    else{
- this.showResultModal(
-  'SANDBOX ERROR',
-  'Veuillez mettre votre mode sur LIVE',
-  ''
-);
+
+
+      if (FeexPayConfig.options.mode === "SANDBOX") {
+
+
+        this.showResultModal(
+          'SUCCESS',
+          'Paiement reussi',
+          'ref_162672_363738_yEGZHZHzh',
+          'ref_162672_363738_yEGZHZHzh'
+        );
+      }
+
+
    }
     },
     
@@ -2062,7 +2076,7 @@ modalContent.appendChild(iframe)
     pollTransactionStatus: function(reference, payBtn, paymentData) {
       // Create a counter for polling attempts
       let pollCount = 0;
-      const maxPolls = 12; // (10 seconds * 12 = 120 seconds)
+      const maxPolls = 18; // (10 seconds * 18 = 180 seconds)
       
       // Create polling interval
       const pollInterval = setInterval(() => {
@@ -2116,7 +2130,7 @@ modalContent.appendChild(iframe)
               ''
             );
           } 
-          else if (data.reason ==="PAYER_NOT_FOUND") {
+          else if (data.reason ==="PAYER_NOT_FOUND" || data.reason ==="PAYER NOT FOUND") {
             // Clear interval and handle failure
             clearInterval(pollInterval);
             
@@ -2929,7 +2943,7 @@ modalContent.appendChild(iframe)
     pollWaveTransactionStatus: function(reference, payBtn, paymentData) {
       // Create a counter for polling attempts
       let pollCount = 0;
-      const maxPolls = 12; // 12 fois 10
+      const maxPolls = 18; // 18 fois 10
       
       // Create polling interval
       const pollInterval = setInterval(() => {
@@ -3150,7 +3164,7 @@ modalContent.appendChild(iframe)
         token: FeexPayConfig.options.token,
         merchant_domain : window.location.origin,
         merchant_ip: ip,
-        payment_interface : "WORDPRESS"
+        payment_interface : "JAVASCRIPT"
         
       };
       
