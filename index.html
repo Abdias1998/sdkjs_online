@@ -21,55 +21,65 @@
         <div id="render"></div>
 
       
-      
-
-        
+   
         
         
         <!-- Bouton personnalisé -->  
         <!-- <button id="customPayButton" style="background-color: #1d4ed8; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 500; cursor: pointer;">
           Payer maintenant
-        </button>
-        -->
+        </button> -->
+       
 
   <script>
     // Initialiser le bouton FeexPay standard
     FeexPayButton.init("render", {
 
-      // // id: "671a774c706593edb3dc4ab2",// Supporte les frais
-      id: "679a12dedea4a0b5d416ea87", //Supporte pas les frais
+      id: "671a774c706593edb3dc4ab2",// Supporte les frais
+      // id: "679a12dedea4a0b5d416ea87", //Supporte pas les frais
       // id : "64636ba955d2ed60e9eac0b9",
-      token: "fp_HHNoQGt9Vn8KpZoLaBkG3uEeKpLUYBaHUZIZXJE3Xgv0OKG2tK3A7PtlytctikrJ", 
+      // token: "fp_HHNoQGt9Vn8KpZoLaBkG3uEeKpLUYBaHUZIZXJE3Xgv0OKG2tK3A7PtlytctikrJ", 
 
 
-      // token :"fp_9jqqsIq8chG71drXD4SklEo6kHB6pjEkE0PYZuESPW49hoVBUyE87pSGH0AEsgkk",
+      token :"test_9jqqsIq8chG71drXD4SklEo6kHB6pjEkE0PYZuESPW49hoVBUyE87pSGH0AEsgkk",
       
 
   
       amount: "100",
       callback: (response) => {
-     if(response.status === "SUCCESSFUL") {
-    // window.location.href = "https://feexpay.me";
+     if(response.status === "SUCCESSFUL" || response.status === "SUCCESS") {
+    window.location.href = "https://feexpay.me";
     console.log("SUCCESSFUL", response);
      }
      if(response.status === "FAILED") {
-    // window.location.href = "https://feexpay.me/error";
+    window.location.href = "https://feexpay.me/error";
     console.log("FAILED", response);
        }
       },
       mode: "LIVE",
-      description: "Achat de produit",
+      description: "Achat de produit()",
       custom_id: "123456",
 currency:"XOF",
       // fields_to_hide: ["email", "name"],
       // custom_button:true,
       // id_custom_button: "customPayButton",
       // callback_url : "https://feexpay.me",
-      // error_callback_url : "https://feexpay.me/error",
-      case : "ALL"
+      error_callback_url : "https://feexpay.me/error",
+      case : "",
+      callback_info : {
+     description :"ABdias ()",
+     reference : "12345623474747",
+     name :"ADINSI ABDIAS"
+      }
  
      
     });
+
+
+
+    
+    
+
+    
 
   </script>
 </body>
