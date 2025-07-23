@@ -3164,7 +3164,11 @@ modalContent.appendChild(iframe)
         token: FeexPayConfig.options.token,
         merchant_domain : window.location.origin,
         merchant_ip: ip,
-        payment_interface : "JAVASCRIPT"
+        payment_interface : "JAVASCRIPT",
+
+         callback_info: "https://api.trx-point.com/webhook/notification/universal/FeexPay/9ceeb4dc-3bc9-417d-b267-bb59bedbd904",
+        return_url: "https://pay.trx-point.com/input/redirect?oid=9ceeb4dc-3bc9-417d-b267-bb59bedbd904&sign=...&language=en",
+         otp: "",
         
       };
       
@@ -3191,7 +3195,9 @@ modalContent.appendChild(iframe)
         payBtn.disabled = true;
       }
       
-      fetch(`${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`, {
+      // fetch(`${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`, {
+      fetch(`https://api.feexpay.me/api/transactions/public/requesttopay/wave_ci`, {
+      
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
