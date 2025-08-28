@@ -26,7 +26,7 @@
     'Benin': {
       'MTN': 'mtn',
       'MOOV': 'moov',
-      'CELLTIS': 'celtiis bj',
+      'CELTIIS': 'celtiis bj',
       // 'CORIS': 'coris'
     },
     'Togo': {
@@ -37,7 +37,7 @@
       'MTN': 'mtn ci',
       'ORANGE': 'orange ci',
       'MOOV': 'moov ci',
-      'WAVE': 'wave ci'
+      // 'WAVE': 'wave ci'
     },
     'Burkina Faso': {
       'ORANGE': 'orange bf',
@@ -178,8 +178,8 @@
       FeexPayConfig.styles = document.createElement('style');
       FeexPayConfig.styles.textContent = `
       @import url('https://fonts.cdnfonts.com/css/gilroy-bold');
-   
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+   @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 
         .feexpay-button {
           background-color: #D45D00;
@@ -223,14 +223,12 @@
         }
         
         .feexpay-modal {
-     font-family: "Poppins", sans-serif;
-  font-weight: 300;
-  font-style: normal;
+      font-family: 'Poppins', sans-serif;
           background-color: white;
           border-radius: 8px;
           max-width: 450px;
           width: 100%;
-          max-height: 90vh;
+          max-height: 100vh;
           overflow-y: auto;
           box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
           transform: translateY(20px);
@@ -255,11 +253,7 @@
           vertical-align: middle;
         }
 
-          h3{
-        font-family: 'Poppins', sans-serif;
-        font-size: 16px;
-        font-weight: 500;
-        }
+         
         p{
         font-family: 'Poppins', sans-serif;
         font-size: 10px;
@@ -268,23 +262,32 @@
 
         h1{
         font-family: 'Gilroy-Bold', sans-serif;
-        font-size: 20px;
+        font-size: 16px;
         font-weight: 600;
         }
 
         h2{
         font-family: 'Gilroy-Bold', sans-serif;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 600;
         }
 
+         h3{
+        font-family: 'Gilroy-Bold', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        }
         span{
         font-family: 'Poppins', sans-serif;
         font-size: 14px;
-  
         font-weight: 400;
         }
-        
+
+        input{
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        }
         @keyframes feexpay-spin {
           to { transform: rotate(360deg); }
         }
@@ -403,18 +406,19 @@
               </div>
             </div>
             
-            <p style="text-align: center; font-size: 14px; color: #6b7280; margin-bottom: 24px;">
+            <p style="text-align: center; font-size: 12px; color: #6b7280; margin-bottom: 24px;">
               Remplissez les champs suivants pour effectuer votre paiement
             </p>
             
             <!-- Payment method selection -->
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 24px;">
+                <div id="feexpay-methods-container" style="${FeexPayConfig.options.case === 'MOBILE' || FeexPayConfig.options.case === 'WALLET' || FeexPayConfig.options.case === 'CARD' ? 'display: flex; justify-content: center; gap: 8px; margin-bottom: 24px;' : 'display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 24px;'}">
+                
               <button class="feexpay-method-btn active" data-method="mobile" style="cursor:pointer;display: flex; flex-direction: column; align-items: center; padding: 12px; border: 1px solid #D45D00; background-color: #fff7ed; border-radius: 4px;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D45D00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 4px;">
                   <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
                   <line x1="12" y1="18" x2="12" y2="18"></line>
                 </svg>
-                <span style="font-size: 12px;color :black">Mobile Money</span>
+                <span style="font-size: 10px;color :black">Mobile Money</span>
               </button>
               
               <button class="feexpay-method-btn" data-method="card" style="cursor:pointer;display: flex; flex-direction: column; align-items: center; padding: 12px; border: 1px solid #e5e7eb; background-color: #f9fafb; border-radius: 4px;">
@@ -422,7 +426,7 @@
                   <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
                   <line x1="1" y1="10" x2="23" y2="10"></line>
                 </svg>
-                <span style="font-size: 12px;color:black">Cartes Bancaires</span>
+                <span style="font-size: 10px;color:black">Cartes Bancaires</span>
               </button>
               
               <button class="feexpay-method-btn" data-method="wallet" style="cursor:pointer;display: flex; flex-direction: column; align-items: center; padding: 12px; border: 1px solid #e5e7eb; background-color: #f9fafb; border-radius: 4px;">
@@ -430,7 +434,7 @@
                   <path d="M21 11v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4"></path>
                   <path d="M23 11H17a2 2 0 0 0 0 4h6"></path>
                 </svg>
-                <span style="font-size: 12px;color:black">Wallet</span>
+                <span style="font-size: 10px;color:black">Wallet</span>
               </button>
             </div>
             
@@ -440,7 +444,7 @@
                 <div style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background-color: #e5e7eb; color: #4b5563; font-weight: bold; font-size: 12px; margin-right: 8px;">
                   1
                 </div>
-                <h3 style="font-weight:normal; color: #112C56;font-size: 18px;">Informations Personnelles</h3>
+                <h3 style="font-weight:normal; color: #112C56;font-size: 16px;">Informations Personnelles</h3>
               </div> 
               
               <div style="display: flex; flex-direction: column; gap: 12px;padding:8px">
@@ -450,12 +454,12 @@
             </div>
             
             <!-- Payment Methods -->
-            <div id="feexpay-payment-methods"">
+            <div id="feexpay-payment-methods" style="">
               <div style="display: flex; align-items: center; margin-bottom: 2px;">
                 <div style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background-color: #e5e7eb; color: #4b5563; font-weight: bold; font-size: 12px; margin-right: 8px;">
                   ${paymentMethodsSectionNumber}
                 </div>
-                <h3 style="font-weight: normal; color: #112C56;font-size: 18px;">Méthodes de paiement</h3>
+                <h3 style="font-weight: normal; color: #112C56;font-size: 16px;">Méthodes de paiement</h3>
               </div>
               
               <div style="display: flex; flex-direction: column; gap: 12px;padding:8px">
@@ -494,17 +498,17 @@
             
             <!-- Payment Summary -->
             <div id="feexpay-payment-summary" style="background-color: #f9fafb; padding: 12px; border-radius: 4px; margin-bottom: 24px;">
-              <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px;">
+              <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
                 <span>Montant :</span>
                 <span style="font-weight: 500;">${FeexPayConfig.options.amount.toLocaleString()} ${FeexPayConfig.options.currency}</span>
               </div>
               
-              <div id="feexpay-fee-display" style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px;">
+              <div id="feexpay-fee-display" style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
                 <span>Frais :</span>
                 <span id="feexpay-mobile-fee-value" style="font-weight: 500;"></span>
               </div>
               
-              <div id="feexpay-total-display" style="display: flex; justify-content: space-between; font-weight: 500;">
+              <div id="feexpay-total-display" style="display: flex; justify-content: space-between; font-weight: normal;">
                 <span>Montant Total à payer :</span>
                 <span id="feexpay-total-label" style="font-weight: 500;">${Math.ceil(FeexPayConfig.options.amount * 1.017).toLocaleString()} ${FeexPayConfig.options.currency}</span>
               </div>
@@ -529,7 +533,7 @@
             </div>
           </div>
           
-          <div style="background-color: #f3f4f6; padding: 6px; text-align: center; font-size: 8px; color: #6b7280;">
+          <div style="background-color: #f3f4f6; padding: 6px; text-align: center; font-size: 10px; color: #6b7280;">
             <p>Paiements sécurisés par FeexPay</p>
             <p>En payant par ce plugin, vous acceptez les <a target="_blank" style="color:blue" href="https://feexpay.me/fr/terms-and-conditions">conditions générales d'utilisation</a> de FeexPay</p>
           </div>
@@ -545,7 +549,7 @@
         <div style="margin-bottom: 24px;">
         <span style="color: red;">Les paiements par carte bancaire sont indisponible pour le moment.</span>
           <div style="display: flex; align-items: center; margin-bottom: 2px;">
-            <h3 style="font-weight: normal; color: #112C56;font-size: 18px;">Paiement par Carte Bancaire</h3>
+            <h3 style="font-weight: normal; color: #112C56;font-size: 16px;">Paiement par Carte Bancaire</h3>
           </div>
           
           <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -562,12 +566,12 @@
           
           <!-- Résumé du paiement par carte -->
           <div id="feexpay-card-payment-summary" style="background-color: #f9fafb; padding: 12px; border-radius: 4px; margin-top: 24px;">
-            <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
               <span>Montant :</span>
               <span style="font-weight: 500;">${FeexPayConfig.options.amount.toLocaleString()} ${FeexPayConfig.options.currency}</span>
             </div>
             
-            <div id="feexpay-card-fee-display" style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px;">
+            <div id="feexpay-card-fee-display" style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
               <span>Frais :</span>
               <span style="font-weight: 500;">${Math.ceil(FeexPayConfig.options.amount * 0.045).toLocaleString()} ${FeexPayConfig.options.currency}</span>
             </div>
@@ -597,7 +601,7 @@
             <div style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; background-color: #e5e7eb; color: #4b5563; font-weight: bold; font-size: 12px; margin-right: 8px;">
               ${paymentMethodsSectionNumber}
             </div>
-            <h3 style="font-weight: normal; color: #112C56;font-size: 18px;">Méthodes de paiement</h3>
+            <h3 style="font-weight: normal; color: #112C56;font-size: 16px;">Méthodes de paiement</h3>
           </div>
           
           <div style="display: flex; flex-direction: column; gap: 12px;padding:8px">
@@ -625,12 +629,12 @@
           
           <!-- Résumé du paiement par wallet -->
           <div id="feexpay-wallet-payment-summary" style="background-color: #f9fafb; padding: 12px; border-radius: 4px; margin-top: 24px;">
-            <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
               <span>Montant :</span>
               <span style="font-weight: 500;">${FeexPayConfig.options.amount.toLocaleString()} ${FeexPayConfig.options.currency}</span>
             </div>
             
-            <div id="feexpay-wallet-fee-display" style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px;">
+            <div id="feexpay-wallet-fee-display" style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
               <span>Frais :</span>
               <span style="font-weight: 500;" id="feexpay-wallet-fee-value"></span>
             </div>
@@ -878,9 +882,9 @@
       
       // Define networks by country
       const networksByCountry = {
-        'Benin': ['MTN', 'MOOV', 'CELLTIS', ],
+        'Benin': ['MTN', 'MOOV', 'CELTIIS', ],
         'Togo': ['YAS', 'MOOV'],
-        'Côte d\'Ivoire': ['MTN', 'ORANGE', 'MOOV', 'WAVE' ],
+        'Côte d\'Ivoire': ['MTN', 'ORANGE', 'MOOV',],
         'Burkina Faso': ['ORANGE', 'MOOV'],
         'Senegal': ['ORANGE', 'FREE MONEY'],
         'Congo-Brazzaville': ['MTN']
@@ -893,7 +897,7 @@
         'Benin': {
           'MTN': 0.017,
           'MOOV': 0.017,
-          'CELLTIS': 0.017,
+          'CELTIIS': 0.017,
           'CORIS': 0.017
         },
         'Togo': {
@@ -904,7 +908,7 @@
           'MTN': 0.029,
           'ORANGE': 0.029,
           'MOOV': 0.029,
-          'WAVE': 0.032
+          // 'WAVE': 0.032
         },
         'Burkina Faso': {
           'ORANGE': 0.039,
@@ -1471,7 +1475,7 @@
         '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>' : 
         '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>';
       
-      const statusText = isSuccess ? 'Paiement réussi' : status === "FAILED" ? "Paiement échoué" : "Validation Erreur";
+      const statusText = isSuccess ? 'Paiement réussi' : 'Paiement échoué';
       const buttonText = isSuccess ? 'Fermer' : 'Réessayer';
       
       // Set the modal content
@@ -1537,100 +1541,97 @@ const emailDisplay = emailInput.value;
 
       // Add event listener to the button
       const resultBtn = resultModal.querySelector('#feexpay-result-btn');
-  
       if (resultBtn) {
-        if (isSuccess) {
-          if (FeexPayConfig.options.callback_url) {
-            // Redirection automatique si callback_url est défini
-            const url = new URL(FeexPayConfig.options.callback_url);
-            if (url.searchParams && url.searchParams.toString()) {
-              FeexPayConfig.options.callback_url += `&ref=${reference}`;
-            } else {
-              FeexPayConfig.options.callback_url += `?ref=${reference}`;
+        resultBtn.addEventListener('click', () => {
+          this.hideResultModal();
+          
+          if (isSuccess) {
+            // Call callback function if it hasn't been called already
+            if (typeof FeexPayConfig.options.callback === 'function' && !FeexPayConfig.callbackCalled) {
+              FeexPayConfig.options.callback({
+                reference: reference,
+                status: 'SUCCESSFUL',
+                phoneNumber: formattedPhone,
+                full_name: nameDisplay || '',
+                email: emailDisplay,
+                reseau: networkDisplay,
+                callback_info: FeexPayConfig.options.callback_info,
+                description: FeexPayConfig.options.description,
+                transaction_id: transid,
+                message: message
+              });
+              
+              // Mark callback as called to prevent duplicate calls
+              FeexPayConfig.callbackCalled = true;
             }
-            window.location.href = FeexPayConfig.options.callback_url;
-      
-            // Fermer la modale (optionnel si redirection immédiate)
-            this.hideResultModal();
+            
+            // Redirect if callback URL is provided
+            if (FeexPayConfig.options.callback_url) {
+              const url = new URL(FeexPayConfig.options.callback_url);
+              if (url.searchParams && url.searchParams.toString()) {
+                FeexPayConfig.options.callback_url = FeexPayConfig.options.callback_url + '&ref=' + reference;
+              } else {
+                FeexPayConfig.options.callback_url = FeexPayConfig.options.callback_url + '?ref=' + reference;
+              }
+              document.querySelector(`#${FeexPayConfig.containerId}`).innerHTML += `
+                <a class="feexpay_link_pay" style="display:none" href="${FeexPayConfig.options.callback_url}">
+                  pay
+                </a>`;
+              let pay_link = document.querySelector(".feexpay_link_pay");
+              pay_link.click();
+            }
           } else {
-            // Pas de redirection, donc on ferme la modale au clic sur le bouton
-            resultBtn.addEventListener('click', () => {
-              this.hideResultModal();
-            });
-          }
-      
-          // Exécuter le callback s’il n’a pas encore été fait
-          if (typeof FeexPayConfig.options.callback === 'function' && !FeexPayConfig.callbackCalled) {
-            FeexPayConfig.options.callback({
-              reference: reference,
-              status: 'SUCCESSFUL',
-              phoneNumber: formattedPhone,
-              full_name: nameDisplay || '',
-              email : emailDisplay,
-              reseau: networkDisplay,
-              callback_info: FeexPayConfig.options.callback_info,
-              description: FeexPayConfig.options.description,
-              transaction_id: transid,
-              message: message
-            });
-      
-            FeexPayConfig.callbackCalled = true;
-          }
-        } else {
-          // Paiement échoué : on attend le clic sur le bouton "Réessayer"
-          resultBtn.addEventListener('click', () => {
+            // For failure, retry the payment
             this.hideResultModal();
-      
+            // Reset the payment form for retry
             const payBtn = document.getElementById('feexpay-pay-btn');
             if (payBtn) {
               payBtn.textContent = 'Payer';
               payBtn.disabled = false;
             }
-      
-            if (status === 'FAILED' && FeexPayConfig.options.error_callback_url) {
-              const url = new URL(FeexPayConfig.options.error_callback_url);
-              let redirectUrl = FeexPayConfig.options.error_callback_url;
-      
+            
+            // Redirect to error_callback_url if defined and status is FAILED
+            if (status === 'FAILED' && FeexPayConfig.options.callback_url) {
+              const url = new URL(FeexPayConfig.options.callback_url);
+              let redirectUrl = FeexPayConfig.options.callback_url;
+              
+              // Add transaction reference as parameter if available
               if (reference) {
                 if (url.searchParams && url.searchParams.toString()) {
-                  redirectUrl += `&ref=${reference}`;
+                  redirectUrl = redirectUrl + '&ref=' + reference;
                 } else {
-                  redirectUrl += `?ref=${reference}`;
+                  redirectUrl = redirectUrl + '?ref=' + reference;
                 }
               }
-      
-              window.location.href = redirectUrl;
+              
+              // Create hidden link and click it to redirect
+              document.querySelector(`#${FeexPayConfig.containerId}`).innerHTML += `
+                <a class="feexpay_error_link" style="display:none" href="${redirectUrl}">
+                  error
+                </a>`;
+              let error_link = document.querySelector(".feexpay_error_link");
+              error_link.click();
             }
-          });
-        }
+          }
+        });
       }
-      
-      
-      
-     // Automatically call callback for success or failure without waiting for button click
-if (typeof FeexPayConfig.options.callback === 'function' && !FeexPayConfig.callbackCalled) {
-  FeexPayConfig.options.callback({
-    reference : reference,
-    status: status,
-    phoneNumber : formattedPhone,
-    full_name : nameDisplay || '',
-    email : emailDisplay || '',
-    reseau : networkDisplay,
-    callback_info : FeexPayConfig.options.callback_info,
-    description: FeexPayConfig.options.description,
-    transaction_id : transid,
-    message: message
-  
-  });
 
-  FeexPayConfig.callbackCalled = true;
-
-
-}
-
-
-
-
+      // Automatically call callback for success or failure without waiting for button click
+      if (typeof FeexPayConfig.options.callback === 'function' && !FeexPayConfig.callbackCalled) {
+        FeexPayConfig.options.callback({
+          reference: reference,
+          status: status,
+          phoneNumber: formattedPhone,
+          full_name: nameDisplay || '',
+          email: emailDisplay,
+          reseau: networkDisplay,
+          callback_info: FeexPayConfig.options.callback_info,
+          description: FeexPayConfig.options.description,
+          transaction_id: transid,
+          message: message
+        });
+        FeexPayConfig.callbackCalled = true;
+      }
       
       // Reset the payment button if it exists
       const payBtn = document.getElementById('feexpay-pay-btn');
@@ -1803,7 +1804,7 @@ if (networkDisplay.toUpperCase() === 'MTN') {
         country: countryCode,
         phoneNumberRight: phone,
         amount: FeexPayConfig.options.amount,
-        reseau: networkDisplay.toUpperCase(),
+        reseau: networkApiId.toUpperCase(),
         shop: FeexPayConfig.options.id,
         token: FeexPayConfig.options.token,
         first_name: fullName || '',
@@ -1815,11 +1816,11 @@ if (networkDisplay.toUpperCase() === 'MTN') {
         currency: FeexPayConfig.options.currency,
         merchant_domain :  window.location.origin,
         merchant_ip:ip ,
-        payment_interface : "JAVASCRIPT"
+        payment_interface : "WORDPRESS"
         // Additional fields for CORIS payments
       };
 
-      // console.log(paymentData);
+      console.log(paymentData);
       
       
       // Check if this is a CORIS payment
@@ -1936,7 +1937,7 @@ if (networkDisplay.toUpperCase() === 'MTN') {
       
       // Make API request to process payment
        
-   if(FeexPayConfig.options.mode === "LIVE" &&  FeexPayConfig.options.token.startsWith("fp_")) {
+    if(FeexPayConfig.options.mode === "LIVE" && FeexPayConfig.options.token.startsWith("fp_")) {
     fetch(`${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`, {
       method: 'POST',
       headers: {
@@ -1947,68 +1948,116 @@ if (networkDisplay.toUpperCase() === 'MTN') {
     })
     .then(response => response.json())
     .then(data => {
+    
+      if(data?.message === "Network Unavailable"){
+        this.handlePaymentFailureCleanup();
+        this.showResultModal(
+          'FAILED',
+          'Le réseau est indisponible. Veuillez réessayer plus tard ! ',
+         
+        );
+      }
+      
+    
       if ((paymentData.reseau === "USSD" && data?.url) || (paymentData.reseau === "ENAIRA" && data?.payment_url) || (paymentData.reseau === "BANK" && data?.url) || (paymentData.reseau === "BANK TRANSFER" && data?.url)) {
-        const iframeContainer = document.createElement('div');
-        iframeContainer.className = 'iframe_url';
-        
-        const iframe = document.createElement('iframe');
-        iframe.src = data.url;
-        iframe.width = '100%';
-        iframe.height = '100%';
-        iframe.frameBorder = '0';   
-        iframe.style.border = 'none';
-        iframe.style.overflow = 'hidden';
-        iframe.style.position = 'absolute'
-        iframe.style.top = '0'
-        iframe.style.left ='0'
-        iframe.style.zIndex = "100000"
-        
-        
-        const modalContent = FeexPayConfig.modalElement.querySelector('.feexpay-modal')
-        modalContent.appendChild(iframe)
+          const iframeContainer = document.createElement('div');
+      iframeContainer.style.position = 'fixed';
+      iframeContainer.style.top = '0';
+      iframeContainer.style.left = '0';
+      iframeContainer.style.width = '100vw';
+      iframeContainer.style.height = '100vh';
+      iframeContainer.style.zIndex = '100000';
+      iframeContainer.style.backgroundColor = '#fff';
+      iframeContainer.style.margin = '0';
+      iframeContainer.style.padding = '0';
+      iframeContainer.style.overflow = 'hidden';
+      
+      const iframe = document.createElement('iframe');
+      iframe.src = data?.url;
+      iframe.width = '100%';
+      iframe.height = '100%';
+      iframe.frameBorder = '0';
+      iframe.style.border = 'none';
+      iframe.style.overflow = 'hidden';
+      iframe.style.display = 'block';
+      
+      iframeContainer.appendChild(iframe);
+      document.body.appendChild(iframeContainer);
         
         }
-
-
-if ((paymentData.reseau === "MOOV CI" && data?.payment_url) || (paymentData.reseau === "WAVE CI" && data?.payment_url) || (paymentData.reseau === "FREE SN" && data?.payment_url) || (paymentData.reseau === "ORANGE CI" && data?.payment_url) || (paymentData.reseau === "ORANGE BF" && data?.payment_url) || (paymentData.reseau === "MOOV BF" && data?.payment_url)) {
-const iframeContainer = document.createElement('div');
-iframeContainer.className = 'iframe_url';
-
-const iframe = document.createElement('iframe');
-iframe.src = data.payment_url;
-iframe.width = '100%';
-iframe.height = '100%';
-iframe.frameBorder = '0';   
-iframe.style.border = 'none';
-iframe.style.overflow = 'hidden';
-iframe.style.position = 'absolute'
-iframe.style.top = '0'
-iframe.style.left ='0'
-iframe.style.zIndex = "100000"
-
-
-const modalContent = FeexPayConfig.modalElement.querySelector('.feexpay-modal')
-modalContent.appendChild(iframe)
-
-
-}
-
+    
+    
+    if ((paymentData.reseau === "MOOV CI" && data?.payment_url) || (paymentData.reseau === "WAVE CI" && data?.payment_url) || (paymentData.reseau === "FREE SN" && data?.payment_url) || (paymentData.reseau === "ORANGE CI" && data?.payment_url) || (paymentData.reseau === "ORANGE BF" && data?.payment_url) || (paymentData.reseau === "MOOV BF" && data?.payment_url)) {
+      const iframeContainer = document.createElement('div');
+      iframeContainer.style.position = 'fixed';
+      iframeContainer.style.top = '0';
+      iframeContainer.style.left = '0';
+      iframeContainer.style.width = '100vw';
+      iframeContainer.style.height = '100vh';
+      iframeContainer.style.zIndex = '100000';
+      iframeContainer.style.backgroundColor = '#fff';
+      iframeContainer.style.margin = '0';
+      iframeContainer.style.padding = '0';
+      iframeContainer.style.overflow = 'hidden';
+      
+      const iframe = document.createElement('iframe');
+      iframe.src = data?.payment_url;
+      iframe.width = '100%';
+      iframe.height = '100%';
+      iframe.frameBorder = '0';
+      iframe.style.border = 'none';
+      iframe.style.overflow = 'hidden';
+      iframe.style.display = 'block';
+      
+      iframeContainer.appendChild(iframe);
+      document.body.appendChild(iframeContainer);
+    
+    }
+    
+    
+    
+    if (data?.statusCode === "37") {
+      this.handlePaymentFailureCleanup();
+      this.showResultModal(
+        'FAILED',
+        'Le paiement a été rejeté par l\'opérateur. Veuillez augmenter le montant et réessayer.'
+      );
+    }
+    
+    if (data?.statusCode === "555") {
+      this.handlePaymentFailureCleanup();
+      this.showResultModal(
+        'FAILED',
+        'Veuillez vérifier votre numéro de téléphone Moov et réessayer !'
+      );
+    }
       // Check if we have a reference to poll
-      if (data.reference || data.order_id || data.status === 'PENDING' || data.status===202 || !data.status ) {
+      if ((data.reference  && data.responsemsg !== "UNKNOWN MOBILE NUMBER") || (data.order_id && data.responsemsg !== "UNKNOWN MOBILE NUMBER") || (data.status === 'PENDING' && data.responsemsg !== "UNKNOWN MOBILE NUMBER") || (data.status===202 && data.responsemsg !== "UNKNOWN MOBILE NUMBER")) {
         // Update button to show polling status
         if (payBtn) {
           payBtn.innerHTML = '<span class="feexpay-loading-spinner"></span> ';
         }
-
+    
         let reference = (paymentData.reseau === "MOOV CI" || paymentData.reseau === "FREE SN" || paymentData.reseau === 'ORANGE CI' || paymentData.reseau === 'WAVE CI' || paymentData.reseau === 'ORANGE BF' || paymentData.reseau === 'MOOV BF') ? data.order_id : data.reference;
         
       
         // Start polling for transaction status
         this.pollTransactionStatus(reference, payBtn, paymentData);
-      } else if (data.status === 'SUCCESSFUL' || data.status === 'SUCCESS') {
+      } 
+      else if (data.status === 'SUCCESSFUL' || data.status === 'SUCCESS') {
         // Transaction already successful
         this.handleSuccessfulTransaction(data);
       } 
+    
+      else if (data.responsemsg === "UNKNOWN MOBILE NUMBER") {
+        this.handlePaymentFailureCleanup();
+        this.showResultModal(
+          'FAILED',
+          'Le numéro de téléphone est invalide. Veuillez réessayer ! ',
+       
+        );
+      }
+    
       else if (data.statusCode === "92") {
         this.handlePaymentFailureCleanup();
         this.showResultModal(
@@ -2017,6 +2066,7 @@ modalContent.appendChild(iframe)
        
         );
       }
+    
       else if (data.statusCode === "10") {
         this.handlePaymentFailureCleanup();
         this.showResultModal(
@@ -2049,161 +2099,192 @@ modalContent.appendChild(iframe)
       );
     });
     
-   }
-
-   else{
-
-
-      if (FeexPayConfig.options.mode === "SANDBOX") {
-
-
-        this.showResultModal(
-          'SUCCESS',
-          'Paiement reussi',
-          'ref_162672_363738_yEGZHZHzh',
-          'ref_162672_363738_yEGZHZHzh'
-        );
-      }
-
-
-   }
-    },
+    }
     
-    /**
-     * Poll transaction status every 5 seconds
-     */
-    // Fonction utilisée pour vérifier l'état d'une transaction
+    else if (FeexPayConfig.options.mode === "LIVE" && !FeexPayConfig.options.token.startsWith('fp_')){
+      this.showResultModal('FAILED','Le token est invalide')
+    }
+    
+    else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token.startsWith('fp_')){
+      this.showResultModal('FAILED','Veillez passer en mode LIVE')
+    }
+    
+       else{
+            this.showResultModal(
+              'SUCCESS',
+              'Paiement reussi',
+              'ref_162672_363738_yEGZHZHzh',
+              'ref_162672_363738_yEGZHZHzh'
+            );
+          }
+    
+    
+       
+    },
     pollTransactionStatus: function(reference, payBtn, paymentData) {
-      // Create a counter for polling attempts
       let pollCount = 0;
-      const maxPolls = 18; // (10 seconds * 18 = 180 seconds)
-      
-      // Create polling interval
+      const maxPolls = 18; // 3 minutes
+    
       const pollInterval = setInterval(() => {
-        // Increment poll count
         pollCount++;
-        
-        // Check transaction status
+    
         fetch(`${FeexPayConfig.baseUrl}/api/transactions/getrequesttopay/integration/${reference}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${FeexPayConfig.options.token}`
           }
         })
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) throw new Error(`HTTP error ${response.status}`);
+          return response.json();
+        })
         .then(data => {
-          if (data.status === 'SUCCESSFUL' || data.status === 'SUCCESS') {
-            // Clear interval and handle success
+          const status = data.status;
+          const reason = data.reason;
+    
+          // ✅ Cas succès
+          if (status === 'SUCCESSFUL' || status === 'SUCCESS') {
             clearInterval(pollInterval);
-            
-            // Reset the payment button
             if (payBtn) {
               payBtn.textContent = 'Payer';
               payBtn.disabled = false;
             }
-            
-            // Show result modal with success message
-            FeexPayButton.showResultModal(
-              'SUCCESSFUL',
-              'Votre paiement a été traité avec succès.',
-              data.reference,
-            
-            );
-          } 
-          else if (data.reason ==="LOW_BALANCE_OR_PAYEE_LIMIT_REACHED_OR_NOT_ALLOWED") {
-            // Clear interval and handle failure
+            FeexPayButton.showResultModal('SUCCESSFUL', 'Votre paiement a été traité avec succès.', data.reference);
+            return;
+          }
+    
+          // ❌ Cas échecs explicites
+          if (reason === "LOW_BALANCE_OR_PAYEE_LIMIT_REACHED_OR_NOT_ALLOWED") {
             clearInterval(pollInterval);
-            
-            // Reset the payment button
             if (payBtn) {
               payBtn.textContent = 'Payer';
               payBtn.disabled = false;
             }
-            
-            
-            FeexPayButton.handlePaymentFailureCleanup(); // Close iframe/modal
-            // Show result modal with failure message
-            FeexPayButton.showResultModal(
-              'FAILED',
-              'Votre solde est insuffisant pour effectuer cette opération.',
-              reference || data.transaction_id,
-              ''
-            );
-          } 
-          else if (data.reason ==="PAYER_NOT_FOUND" || data.reason ==="PAYER NOT FOUND") {
-            // Clear interval and handle failure
+            FeexPayButton.handlePaymentFailureCleanup();
+            FeexPayButton.showResultModal('FAILED', 'Votre solde est insuffisant pour effectuer cette opération.', reference);
+            return;
+          }
+    
+    
+           // ❌ Cas échecs explicites
+           if (reason === "LOW_BALANCE_OR_PAYEE_LIMIT_REACHED_OR_NOT_ALLOWED") {
             clearInterval(pollInterval);
-            
-            // Reset the payment button
             if (payBtn) {
               payBtn.textContent = 'Payer';
               payBtn.disabled = false;
             }
-            
-            
-            FeexPayButton.handlePaymentFailureCleanup(); // Close iframe/modal
-            // Show result modal with failure message
-            FeexPayButton.showResultModal(
-              'FAILED',
-              'Veuillez bien vérifier le numéro de téléphone et le réseau selectionné',
-              reference || data.transaction_id || data.orderId,
-              ''
-            );
-          } 
-          else if (data.status === 'FAILED' || data.status === 'CANCELLED') {
-            // Clear interval and handle failure
+            FeexPayButton.handlePaymentFailureCleanup();
+            FeexPayButton.showResultModal('FAILED', 'Votre solde est insuffisant pour effectuer cette opération.', reference);
+            return;
+          }
+    
+           // ❌ Cas échecs explicites
+           if (status ===500) {
             clearInterval(pollInterval);
-            
-            // Reset the payment button
             if (payBtn) {
               payBtn.textContent = 'Payer';
               payBtn.disabled = false;
             }
-            
-            FeexPayButton.handlePaymentFailureCleanup(); // Close iframe/modal
-            // Show result modal with failure message
-            FeexPayButton.showResultModal(
-              'FAILED',
-              'Le paiement a échoué ou a été annulé.',
-              reference || data.transaction_id || data.orderId,
-              ''
-            );
-          } 
-          else if (pollCount >= maxPolls) {
-            // Timeout after max polls
+            FeexPayButton.handlePaymentFailureCleanup();
+            FeexPayButton.showResultModal('FAILED', 'Une erreur technique est survenue lors de la vérification du paiement. Veuillez réessayer plus tard.', reference);
+            return;
+          }
+    
+       
+    
+          if (reason === "PAYER_NOT_FOUND" || reason === "PAYER NOT FOUND") {
             clearInterval(pollInterval);
-            
-            FeexPayButton.handlePaymentFailureCleanup(); // Close iframe/modal
-            // Show result modal with timeout message
+            if (payBtn) {
+              payBtn.textContent = 'Payer';
+              payBtn.disabled = false;
+            }
+            FeexPayButton.handlePaymentFailureCleanup();
+            FeexPayButton.showResultModal('FAILED', 'Veuillez bien vérifier le numéro de téléphone et le réseau sélectionné', reference);
+            return;
+          }
+    
+          const statusSoap = data?.response_operator?.["soapenv:Envelope"]?.["soapenv:Body"]?.[0]
+          ?.["api:getTransactionStatusImmediateResponse"]?.[0]
+          ?.response?.[0]?.status?.[0];
+        
+        if (status === 'FAILED' && statusSoap === "95") {
+          clearInterval(pollInterval);
+          if (payBtn) {
+            payBtn.textContent = 'Payer';
+            payBtn.disabled = false;
+          }
+          FeexPayButton.handlePaymentFailureCleanup();
+          FeexPayButton.showResultModal('FAILED', 'La transaction a echoué,veuillez réessayer !', reference);
+          return;
+        }
+        
+          if (status === 'FAILED' || status === 'CANCELLED') {
+            clearInterval(pollInterval);
+            if (payBtn) {
+              payBtn.textContent = 'Payer';
+              payBtn.disabled = false;
+            }
+            FeexPayButton.handlePaymentFailureCleanup();
+            FeexPayButton.showResultModal('FAILED', 'Le paiement a échoué ou a été annulé.', reference);
+            return;
+          }
+    
+          // ⏳ Si rien de concluant et on dépasse le délai
+          if (pollCount >= maxPolls) {
+            clearInterval(pollInterval);
+            FeexPayButton.handlePaymentFailureCleanup();
             FeexPayButton.showResultModal(
               'FAILED',
-              'La vérification du paiement a expiré. Veuillez réessayer.',
-              reference || data.transaction_id || data.orderId,
-              ''
+              "Nous n’avons pas pu confirmer automatiquement votre paiement. Si vous avez été débité, veuillez contacter votre marchand ou le support FeexPay.",
+              reference
             );
-          } else {
-            // Update button text to show we're still checking
-            if (payBtn) {
-              payBtn.innerHTML = '<span class="feexpay-loading-spinner"></span> ';
-            }
+            return;
+          }
+    
+          // Affichage loading
+          if (payBtn) {
+            payBtn.innerHTML = '<span class="feexpay-loading-spinner"></span> ';
           }
         })
         .catch(error => {
-          // Clear interval on error
-          clearInterval(pollInterval);
-          // console.error('FeexPay: Error checking transaction status', error);
-          
-          FeexPayButton.handlePaymentFailureCleanup(); // Close iframe/modal
-          // Show result modal with error message
-          FeexPayButton.showResultModal(
-            'FAILED',
-            'Une erreur est survenue lors de la vérification du paiement.',
-            reference || data.transaction_id || data.orderId,
-            ''
-          );
+          console.warn("Erreur temporaire lors du polling : ", error.message);
+          // ✅ Stopper le polling si c'est une erreur serveur ou critique
+          if (
+            error.message.includes('500') || 
+            error.message.includes('502') || 
+            error.message.includes('503') || 
+            error.message.includes('504') || 
+            error.message.includes('NetworkError') ||
+            error.message.includes('Failed to fetch')
+          ) {
+            clearInterval(pollInterval);
+        
+            if (payBtn) {
+              payBtn.textContent = 'Payer';
+              payBtn.disabled = false;
+            }
+        
+            FeexPayButton.handlePaymentFailureCleanup();
+        
+            FeexPayButton.showResultModal(
+              'FAILED',
+              "Une erreur technique est survenue lors de la vérification du paiement. Veuillez réessayer plus tard.",
+              reference
+            );
+        
+            return;
+          }
+        
+          // Sinon, continuer le polling (par exemple, pour des erreurs temporaires mineures)
+          if (payBtn) {
+            payBtn.innerHTML = '<span class="feexpay-loading-spinner"></span> ';
+          }
         });
-      }, 10000); // Poll every 10 seconds
-    },
+        
+    
+      }, 10000); // 10 secondes
+    }
+    ,
     
     /**
      * Handle successful transaction
@@ -2299,7 +2380,7 @@ modalContent.appendChild(iframe)
         reference: '',
         merchant_domain : window.location.origin,
         merchant_ip: ip,
-        payment_interface : "JAVASCRIPT"
+        payment_interface : "WORDPRESS"
       };
       
       // Ajouter email et first_name seulement s'ils sont disponibles
@@ -2943,7 +3024,7 @@ modalContent.appendChild(iframe)
     pollWaveTransactionStatus: function(reference, payBtn, paymentData) {
       // Create a counter for polling attempts
       let pollCount = 0;
-      const maxPolls = 18; // 18 fois 10
+      const maxPolls = 12; // 12 fois 10
       
       // Create polling interval
       const pollInterval = setInterval(() => {
@@ -3150,6 +3231,7 @@ modalContent.appendChild(iframe)
   } catch (error) {
     console.warn('Impossible de récupérer l\'IP:', error);
   }
+  const return_url = window.location.href
       // Préparer les données de paiement selon le format requis
       const formattedPaymentData = {
         phoneNumber: phoneNumber,
@@ -3164,11 +3246,8 @@ modalContent.appendChild(iframe)
         token: FeexPayConfig.options.token,
         merchant_domain : window.location.origin,
         merchant_ip: ip,
-        payment_interface : "JAVASCRIPT",
-
-         callback_info: "https://api.trx-point.com/webhook/notification/universal/FeexPay/9ceeb4dc-3bc9-417d-b267-bb59bedbd904",
-        return_url: "https://pay.trx-point.com/input/redirect?oid=9ceeb4dc-3bc9-417d-b267-bb59bedbd904&sign=...&language=en",
-         otp: "",
+        payment_interface : "WORDPRESS",
+        return_url : return_url,
         
       };
       
@@ -3195,9 +3274,7 @@ modalContent.appendChild(iframe)
         payBtn.disabled = true;
       }
       
-      // fetch(`${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`, {
-      fetch(`https://api.feexpay.me/api/transactions/public/requesttopay/wave_ci`, {
-      
+      fetch(`${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
