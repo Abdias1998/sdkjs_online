@@ -1557,7 +1557,7 @@ const emailDisplay = emailInput.value;
                 reseau: networkDisplay,
                 callback_info: FeexPayConfig.options.callback_info,
                 description: FeexPayConfig.options.description,
-                transaction_id: transid,
+                transaction_id: transid || reference,
                 message: message
               });
               
@@ -1627,7 +1627,7 @@ const emailDisplay = emailInput.value;
           reseau: networkDisplay,
           callback_info: FeexPayConfig.options.callback_info,
           description: FeexPayConfig.options.description,
-          transaction_id: transid,
+          transaction_id: transid || reference,
           message: message
         });
         FeexPayConfig.callbackCalled = true;
