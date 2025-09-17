@@ -2460,7 +2460,7 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       const pollInterval = setInterval(() => {
         pollCount++;
     
-        fetch(`${FeexPayConfig.baseUrl}/api/transactions/public/single/status//${reference}`, {
+        fetch(`${FeexPayConfig.baseUrl}/api/transactions/public/single/status/${reference}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${FeexPayConfig.options.token}`
