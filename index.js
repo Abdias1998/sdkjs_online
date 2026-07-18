@@ -12,7 +12,8 @@
 
   // Store SDK configuration
   const FeexPayConfig = {
-    baseUrl: 'https://api.feexpay.me',
+    //  baseUrl: 'https://testnet-api.feexpay.me',
+    baseUrl :'https://api-v2.feexpay.me',
     containerId: null,
     options: {},
     modalElement: null,
@@ -45,13 +46,19 @@
       'ORANGE': 'orange bf',
       'MOOV': 'moov bf'
     },
+    
     'Senegal': {
       'ORANGE': 'orange sn',
-      'FREE MONEY': 'free sn'
+      'FREE MONEY': 'free sn',
+      'WAVE': 'wave sn'
     },
     'Congo-Brazzaville': {
       'MTN': 'mtn cg'
-    }
+    },
+    'Mali': {
+      'ORANGE': 'orange ml',
+      'MOBICASH': 'mobicash ml'
+    },
   };
   
   // Define networks that require OTP
@@ -60,7 +67,9 @@
   // Define wallet providers by country
   const walletProviders = {
     'Benin': ['CORIS'],
-    'Côte d\'Ivoire': ['WAVE']
+    'Côte d\'Ivoire': ['WAVE'],
+    'Senegal': ['WAVE'],
+    'Burkina Faso': ['WAVE']
   };
   
 
@@ -139,6 +148,7 @@
         currency : options.currency || 'XOF',
         case : options.case || 'ALL',
         resultModalElement : options.resultModalElement || null,
+        networks: options.networks || null,
       };
       
       // Inject styles
@@ -376,6 +386,24 @@
       // Determine the starting section number based on whether personal info is hidden
       const paymentMethodsSectionNumber = hidePersonalInfoSection ? 1 : 2;
       
+      // Build country options — filtered by options.networks if provided
+      const allCountryDefs = [
+        { value: 'Benin', label: '🇧🇯 Benin' },
+        { value: 'Togo', label: '🇹🇬 Togo' },
+        { value: "Côte d'Ivoire", label: "🇨🇮 Côte d'Ivoire" },
+        { value: 'Burkina Faso', label: '🇧🇫 Burkina Faso' },
+        { value: 'Senegal', label: '🇸🇳 Senegal' },
+        { value: 'Congo-Brazzaville', label: '🇨🇬 Congo-Brazzaville' },
+        { value: 'Mali', label: '🇲🇱 Mali' },
+      ];
+      const allowedNetworks = FeexPayConfig.options.networks;
+      const visibleCountries = allowedNetworks
+        ? allCountryDefs.filter(c => allowedNetworks[c.value] && allowedNetworks[c.value].length > 0)
+        : allCountryDefs;
+      const countryOptionsHtml = visibleCountries
+        .map(c => `<option value="${c.value}"> ${c.label}</option>`)
+        .join('');
+      
       // In a real implementation, this would render a full payment form
       // with inputs for personal info, payment method selection, etc.
       // For this demo, we'll use a simplified version
@@ -467,12 +495,7 @@
                 <div style="display: flex; align-items: center;">
                   <div style="width: 120px;">
                     <select id="feexpay-country-select" style="padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; outline: none; background-color: white; width: 100%;">
-                      <option value="Benin"> 🇧🇯 Benin</option>
-                      <option value="Togo"> 🇹🇬 Togo</option>
-                      <option value="Côte d'Ivoire"> 🇨🇮 Côte d'Ivoire</option>
-                      <option value="Burkina Faso"> 🇧🇫 Burkina Faso</option>
-                      <option value="Senegal"> 🇸🇳 Senegal</option>
-                      <option value="Congo-Brazzaville"> 🇨🇬 Congo-Brazzaville</option>
+                      ${countryOptionsHtml}
                     </select>
                   </div>
                   <div style="flex: 1; margin-left: 12px;">
@@ -562,6 +585,24 @@
             <input oninput="this.value = this.value.toUpperCase()" type="text" id="feexpay-lastname-input" placeholder="Nom" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 0 4px 4px 0; outline: none;">
             <input type="email" id="feexpay-card-email-input" placeholder="Email" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 0 4px 4px 0; outline: none;">
             <input type="tel" id="feexpay-card-phone-input" placeholder="Numéro de téléphone avec indicatif" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 0 4px 4px 0; outline: none;">
+            <input type="text" id="feexpay-card-adress-input" placeholder="Adresse" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 0 4px 4px 0; outline: none;">
+            <input type="text" id="feexpay-card-city-input" placeholder="Ville" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 0 4px 4px 0; outline: none;">
+            <input type="text" id="feexpay-card-zip-input" placeholder="Code postal" style="flex: 1; padding: 8px; border: 1px solid #d1d5db; border-radius: 0 4px 4px 0; outline: none;">
+            <select id="feexpay-card-country-input" style="padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; outline: none; background-color: white;">
+              <option value="">Sélectionner un pays</option>
+              <option value="GH">Ghana</option>
+              <option value="CI">Côte d'Ivoire</option>
+              <option value="SN">Sénégal</option>
+              <option value="BF">Burkina Faso</option>
+              <option value="ML">Mali</option>
+              <option value="NE">Niger</option>
+              <option value="TG">Togo</option>
+              <option value="BJ">Bénin</option>
+              <option value="CM">Cameroun</option>
+              <option value="FR">France</option>
+              <option value="US">États-Unis</option>
+              <option value="CA">Canada</option>
+            </select>
           
           </div>
           
@@ -609,8 +650,18 @@
             <div style="display: flex; align-items: center;">
               <div style="width: 120px;">
                 <select id="feexpay-wallet-country-select" style="padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; outline: none; background-color: white; width: 100%;">
-                  <option value="Benin"> 🇧🇯 Benin</option>
-                  <option value="Côte d'Ivoire"> 🇨🇮 Côte d'Ivoire</option>
+                  ${(() => {
+                    const allWalletCountries = [
+                      { value: 'Benin', label: '🇧🇯 Benin' },
+                      { value: "Côte d'Ivoire", label: "🇨🇮 Côte d'Ivoire" },
+                      { value: 'Senegal', label: '🇸🇳 Senegal' },
+                      {value :'Burkina Faso', label: '🇧🇫 Burkina Faso'}
+                    ];
+                    const filtered = allowedNetworks
+                      ? allWalletCountries.filter(c => allowedNetworks[c.value] && allowedNetworks[c.value].length > 0 && walletProviders[c.value])
+                      : allWalletCountries.filter(c => walletProviders[c.value]);
+                    return filtered.map(c => `<option value="${c.value}"> ${c.label}</option>`).join('');
+                  })()}
                 </select>
               </div>
               <div style="flex: 1; margin-left: 12px;">
@@ -883,12 +934,13 @@
       
       // Define networks by country
       const networksByCountry = {
-        'Benin': ['MTN', 'MOOV', 'CELTIIS', ],
+        'Benin': ['MTN', 'MOOV', 'CELTIIS'],
         'Togo': ['YAS', 'MOOV'],
         'Côte d\'Ivoire': ['MTN', 'ORANGE', 'MOOV', ],
         'Burkina Faso': ['ORANGE', 'MOOV'],
-        'Senegal': ['ORANGE', 'FREE MONEY'],
-        'Congo-Brazzaville': ['MTN']
+        'Senegal': ['ORANGE', 'FREE MONEY', 'WAVE'],
+        'Congo-Brazzaville': ['MTN'],
+        'Mali': ['ORANGE', 'MOBICASH']
       };
       
       // Use the globally defined networkApiIds and networksRequiringOtp
@@ -912,15 +964,20 @@
           'WAVE': 0.032
         },
         'Burkina Faso': {
-          'ORANGE': 0.039,
-          'MOOV': 0.022
+          'ORANGE': 0.032,
+          'MOOV': 0.032
         },
         'Senegal': {
-          'ORANGE': 0.019,
-          'FREE MONEY': 0.019
+          'ORANGE': 0.020,
+          'FREE MONEY': 0.020,
+          'WAVE': 0.020
         },
         'Congo-Brazzaville': {
           'MTN': 0.03,
+        },
+        'Mali': {
+          'ORANGE': 0.030,
+          'MOBICASH': 0.0325
         }
       };
       
@@ -931,7 +988,8 @@
         'Côte d\'Ivoire': '+225',
         'Burkina Faso': '+226',
         'Senegal': '+221',
-        'Congo-Brazzaville': '+242'
+        'Congo-Brazzaville': '+242',
+        'Mali': '+223'
       };
       
       // Function to update network options, country code, and fee information
@@ -939,8 +997,18 @@
         // Clear existing options
         networkSelect.innerHTML = '';
         
-        // Add new options based on selected country
-        const networks = networksByCountry[country] || [];
+        // Add new options based on selected country, filtered by options.networks if provided
+        const allNetworks = networksByCountry[country] || [];
+        const merchantNetworks = FeexPayConfig.options.networks && FeexPayConfig.options.networks[country];
+        const networks = merchantNetworks
+          ? allNetworks.filter(n => {
+              const apiId = (networkApiIds[country] && networkApiIds[country][n]) || '';
+              return merchantNetworks.some(m =>
+                m.toUpperCase() === n.toUpperCase() ||
+                m.toUpperCase() === apiId.toUpperCase()
+              );
+            })
+          : allNetworks;
         networks.forEach(network => {
           const option = document.createElement('option');
           option.value = network;
@@ -1204,11 +1272,7 @@
       const toggleOtpField = (country, network) => {
         const otpField = document.getElementById('feexpay-otp-field');
         if (otpField) {
-          if (country === 'Senegal' && network === 'ORANGE') {
-            otpField.style.display = 'block';
-          } else {
-            otpField.style.display = 'none';
-          }
+          otpField.style.display = 'none';
         }
       };
       
@@ -1370,7 +1434,7 @@
       };
       
       // Initialize wallet providers for default country
-      updateWalletProviders(walletCountrySelect.value);
+      if (walletCountrySelect.value) updateWalletProviders(walletCountrySelect.value);
       
       // Update wallet providers when country changes
       walletCountrySelect.addEventListener('change', function() {
@@ -1383,7 +1447,7 @@
       });
       
       // Initialize fee information for the default country and provider
-      if (walletProviders[walletCountrySelect.value]?.length > 0) {
+      if (walletCountrySelect.value && walletProviders[walletCountrySelect.value]?.length > 0) {
         updateWalletFeeInformation(walletCountrySelect.value, walletProviders[walletCountrySelect.value][0]);
       }
       
@@ -1502,7 +1566,8 @@
             'Côte d\'Ivoire': '+225',
             'Burkina Faso': '+226',
             'Senegal': '+221',
-            'Congo-Brazzaville': '+242'
+            'Congo-Brazzaville': '+242',
+            'Mali': '+223'
           };
       // Get country code without the + sign
       const countryCodeElement = document.querySelector('#feexpay-country-code span');
@@ -1654,8 +1719,6 @@ if (typeof FeexPayConfig.options.callback === 'function' && !FeexPayConfig.callb
 
 
 
-
-      
       // Reset the payment button if it exists
       const payBtn = document.getElementById('feexpay-pay-btn');
       if (payBtn) {
@@ -1787,7 +1850,8 @@ processPayment: async function() {
       'Côte d\'Ivoire': '+225',
       'Burkina Faso': '+226',
       'Senegal': '+221',
-      'Congo-Brazzaville': '+242'
+      'Congo-Brazzaville': '+242',
+      'Mali': '+223'
     };
     countryCode = countryCodes[country]?.replace('+', '') || '';
   }
@@ -1796,7 +1860,7 @@ processPayment: async function() {
   const otpInput = document.getElementById('feexpay-otp-input');
   const fullName = nameInput ? nameInput.value.trim() : '';
   const email = emailInput ? emailInput.value.trim() : '';
-  const otp = otpInput && country === 'Senegal' && networkDisplay === 'ORANGE' ? otpInput.value.trim() : '';
+  const otp = '';
 
   let cleanPhone = phone.replace(/\D/g, ''); // Retire tous les caractères non numériques
 
@@ -1826,11 +1890,10 @@ description = description.replace(/[^a-zA-Z0-9 ]/g, '');
   const paymentData = {
     phoneNumber: formattedPhone, 
     country: countryCode,
-    phoneNumberRight: phone,
     amount: FeexPayConfig.options.amount,
     reseau: networkApiId.toUpperCase(),
     shop: FeexPayConfig.options.id,
-    token: FeexPayConfig.options.token,
+
     first_name: fullName || '',
     email: email || '',
   custom_id : FeexPayConfig.options.custom_id,
@@ -1854,23 +1917,6 @@ description = description.replace(/[^a-zA-Z0-9 ]/g, '');
     return;
   }
   
-  // Cas spécial pour ORANGE au Sénégal (utilise notre champ OTP personnalisé)
-  if (country === 'Senegal' && networkDisplay === 'ORANGE') {
-    // Vérifier si l'OTP a été saisi
-    const otpInput = document.getElementById('feexpay-otp-input');
-    if (!otpInput || !otpInput.value.trim()) {
-     
-      this.showResultModal('REQUIRED', 'Veuillez entrer le code OTP obtenu en tapant #144#391#', '');
-      payBtn.textContent = 'Payer';
-      payBtn.disabled = false;
-      return;
-    }
-    
-    // L'OTP est déjà inclus dans paymentData grâce à notre modification précédente
-    // Traiter le paiement directement
-    this.submitPayment(networkApiId, paymentData);
-    return;
-  }
   
   // Check if network requires OTP (other than CORIS which is handled separately)
   const requiresOtp = networksRequiringOtp.includes(networkDisplay) && 
@@ -1936,176 +1982,7 @@ description = description.replace(/[^a-zA-Z0-9 ]/g, '');
      * @param networkApiId - API identifier for the network
      * @param paymentData - Payment data to submit
      */
-//     submitPayment: function(networkApiId, paymentData) {
-//       const payBtn = document.getElementById('feexpay-pay-btn');
-//       if (payBtn) {
-//         payBtn.innerHTML = '<span class="feexpay-loading-spinner"></span> ';
-//         payBtn.disabled = true;
-//       }
-      
-//       // Special handling for CORIS in Benin
-//       // console.log('Network API ID:', networkApiId, 'Network Display:', paymentData.reseau);
-//       if (networkApiId === 'coris' || paymentData.reseau === 'CORIS') {
-//         // console.log('Processing CORIS payment');
-//         this.processCorisPayment(paymentData);
-//         return;
-//       }
-      
-//       // Special handling for WAVE in Côte d'Ivoire
-//       if (networkApiId === 'wave_ci' || paymentData.reseau === 'WAVE') {
-//         // console.log('Processing WAVE CI payment');
-//         this.processWaveCIPayment(paymentData);
-//         return;
-//       }
-      
-//       // Make API request to process payment
-       
-//    if(FeexPayConfig.options.mode === "LIVE" &&  FeexPayConfig.options.token.startsWith("fp_")) {
-//     fetch(`${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`, {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': `Bearer ${FeexPayConfig.options.token}`
-//       },
-//       body: JSON.stringify(paymentData)
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//       console.log(data);
-
-//       if ((paymentData.reseau === "USSD" && data?.url) || (paymentData.reseau === "ENAIRA" && data?.payment_url) || (paymentData.reseau === "BANK" && data?.url) || (paymentData.reseau === "BANK TRANSFER" && data?.url)) {
-//         const iframeContainer = document.createElement('div');
-//         iframeContainer.className = 'iframe_url';
-        
-//         const iframe = document.createElement('iframe');
-//         iframe.src = data.url;
-//         iframe.width = '100%';
-//         iframe.height = '100%';
-//         iframe.frameBorder = '0';   
-//         iframe.style.border = 'none';
-//         iframe.style.overflow = 'hidden';
-//         iframe.style.position = 'absolute'
-//         iframe.style.top = '0'
-//         iframe.style.left ='0'
-//         iframe.style.zIndex = "100000"
-        
-        
-//         const modalContent = FeexPayConfig.modalElement.querySelector('.feexpay-modal')
-//         modalContent.appendChild(iframe)
-        
-//         }
-
-
-// if ((paymentData.reseau === "MOOV CI" && data?.payment_url) || (paymentData.reseau === "WAVE CI" && data?.payment_url) || (paymentData.reseau === "FREE SN" && data?.payment_url) || (paymentData.reseau === "ORANGE CI" && data?.payment_url) || (paymentData.reseau === "ORANGE BF" && data?.payment_url) || (paymentData.reseau === "MOOV BF" && data?.payment_url)) {
-// const iframeContainer = document.createElement('div');
-// iframeContainer.className = 'iframe_url';
-
-// const iframe = document.createElement('iframe');
-// iframe.src = data.payment_url;
-// iframe.width = '100%';
-// iframe.height = '100%';
-// iframe.frameBorder = '0';   
-// iframe.style.border = 'none';
-// iframe.style.overflow = 'hidden';
-// iframe.style.position = 'absolute'
-// iframe.style.top = '0'
-// iframe.style.left ='0'
-// iframe.style.zIndex = "100000"
-
-
-// const modalContent = FeexPayConfig.modalElement.querySelector('.feexpay-modal')
-// modalContent.appendChild(iframe)
-
-
-// }
-
-//       // Check if we have a reference to poll
-//       if (data.reference || data.order_id || data.status === 'PENDING' || data.status===202 || !data.status ) {
-//         // Update button to show polling status
-//         if (payBtn) {
-//           payBtn.innerHTML = '<span class="feexpay-loading-spinner"></span> ';
-//         }
-
-//         let reference = (paymentData.reseau === "MOOV CI" || paymentData.reseau === "FREE SN" || paymentData.reseau === 'ORANGE CI' || paymentData.reseau === 'WAVE CI' || paymentData.reseau === 'ORANGE BF' || paymentData.reseau === 'MOOV BF') ? data.order_id : data.reference;
-        
-      
-//         // Start polling for transaction status
-//         this.pollTransactionStatus(reference, payBtn, paymentData);
-//       } 
-
-//       if(data?.message === "Network Unavailable"){
-//         this.handlePaymentFailureCleanup();
-//         this.showResultModal(
-//           'FAILED',
-//           'Le réseau est indisponible. Veuillez réessayer plus tard ! ',
-       
-//         );
-//       }
-      
-//       else if (data.status === 'SUCCESSFUL' || data.status === 'SUCCESS') {
-//         // Transaction already successful
-//         this.handleSuccessfulTransaction(data);
-//       } 
-//       else if (data.statusCode === "92") {
-//         this.handlePaymentFailureCleanup();
-//         this.showResultModal(
-//           'FAILED',
-//           'Votre session USSD a expiré ou la transaction a été annulé. Veuillez réessayer ! ',
-       
-//         );
-//       }
-//       else if (data.statusCode === "10") {
-//         this.handlePaymentFailureCleanup();
-//         this.showResultModal(
-//           'FAILED',
-//           'Votre solde est insuffisant pour effectuer cette opération.',
-       
-//         );
-//       }
-      
-      
-//       else {
-//         // Show error in result modal
-//         this.handlePaymentFailureCleanup();
-//         this.showResultModal(
-//           'FAILED',
-//           data.message || 'Une erreur est survenue lors du traitement du paiement',
-//           data.reference || ''
-//         );
-//       }
-//     })
-//     .catch(error => {
-//       // console.error('FeexPay: Payment processing error', error);
-      
-//       // Show error in result modal
-//       this.handlePaymentFailureCleanup();
-//       this.showResultModal(
-//         'FAILED',
-//         'Une erreur est survenue lors du traitement du paiement',
-//         ''
-//       );
-//     });
-    
-//    }
-
-//    else{
-
-
-//       if (FeexPayConfig.options.mode === "SANDBOX") {
-
-
-//         this.showResultModal(
-//           'SUCCESS',
-//           'Paiement reussi',
-//           'ref_162672_363738_yEGZHZHzh',
-//           'ref_162672_363738_yEGZHZHzh'
-//         );
-//       }
-
-
-//    }
-//     },
-    
+  
 submitPayment: function(networkApiId, paymentData) {
   const payBtn = document.getElementById('feexpay-pay-btn');
   if (payBtn) {
@@ -2180,7 +2057,11 @@ fetch(`${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`, {
     }
 
 
-if ((paymentData.reseau === "MOOV CI" && data?.payment_url) || (paymentData.reseau === "WAVE CI" && data?.payment_url) || (paymentData.reseau === "FREE SN" && data?.payment_url) || (paymentData.reseau === "ORANGE CI" && data?.payment_url) || (paymentData.reseau === "ORANGE BF" && data?.payment_url) || (paymentData.reseau === "MOOV BF" && data?.payment_url)) {
+if ((paymentData.reseau === "WAVE CI" && data?.payment_url) || (paymentData.reseau === "WAVE SN" && data?.payment_url)) {
+  window.open(data?.payment_url, '_blank');
+}
+
+if (paymentData.reseau === "ORANGE SN" && data?.payment_url) {
   const iframeContainer = document.createElement('div');
   iframeContainer.style.position = 'fixed';
   iframeContainer.style.top = '0';
@@ -2204,7 +2085,6 @@ if ((paymentData.reseau === "MOOV CI" && data?.payment_url) || (paymentData.rese
   
   iframeContainer.appendChild(iframe);
   document.body.appendChild(iframeContainer);
-
 }
 
 
@@ -2231,7 +2111,7 @@ if (data?.statusCode === "555") {
       payBtn.innerHTML = '<span class="feexpay-loading-spinner"></span> ';
     }
 
-    let reference = (paymentData.reseau === "MOOV CI" || paymentData.reseau === "FREE SN" || paymentData.reseau === 'ORANGE CI' || paymentData.reseau === 'WAVE CI' || paymentData.reseau === 'ORANGE BF' || paymentData.reseau === 'MOOV BF') ? data.order_id : data.reference;
+    let reference = (paymentData.reseau === "MOOV CI" || paymentData.reseau === "FREE SN" || paymentData.reseau === 'ORANGE CI' || paymentData.reseau === 'WAVE CI' || paymentData.reseau === 'ORANGE BF' || paymentData.reseau === 'MOOV BF' || paymentData.reseau === 'WAVE SN' || paymentData.reseau === 'ORANGE SN') ? data.order_id : data.reference;
     
   
     // Start polling for transaction status
@@ -2317,150 +2197,15 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
 
 
 
-    /**
-     * Poll transaction status every 5 seconds
-     */
-    // Fonction utilisée pour vérifier l'état d'une transaction
-    // pollTransactionStatus: function(reference, payBtn, paymentData) {
-    //   // Create a counter for polling attempts
-    //   let pollCount = 0;
-    //   const maxPolls = 18; // (10 seconds * 18 = 180 seconds)
-      
-    //   // Create polling interval
-    //   const pollInterval = setInterval(() => {
-    //     // Increment poll count
-    //     pollCount++;
-        
-    //     // Check transaction status
-    //     fetch(`${FeexPayConfig.baseUrl}/api/transactions/getrequesttopay/integration/${reference}`, {
-    //       method: 'GET',
-    //       headers: {
-    //         'Authorization': `Bearer ${FeexPayConfig.options.token}`
-    //       }
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       if (data.status === 'SUCCESSFUL' || data.status === 'SUCCESS') {
-    //         // Clear interval and handle success
-    //         clearInterval(pollInterval);
-            
-    //         // Reset the payment button
-    //         if (payBtn) {
-    //           payBtn.textContent = 'Payer';
-    //           payBtn.disabled = false;
-    //         }
-            
-    //         // Show result modal with success message
-    //         FeexPayButton.showResultModal(
-    //           'SUCCESSFUL',
-    //           'Votre paiement a été traité avec succès.',
-    //           data.reference,
-            
-    //         );
-    //       } 
-    //       else if (data.reason ==="LOW_BALANCE_OR_PAYEE_LIMIT_REACHED_OR_NOT_ALLOWED") {
-    //         // Clear interval and handle failure
-    //         clearInterval(pollInterval);
-            
-    //         // Reset the payment button
-    //         if (payBtn) {
-    //           payBtn.textContent = 'Payer';
-    //           payBtn.disabled = false;
-    //         }
-            
-            
-    //         FeexPayButton.handlePaymentFailureCleanup(); // Close iframe/modal
-    //         // Show result modal with failure message
-    //         FeexPayButton.showResultModal(
-    //           'FAILED',
-    //           'Votre solde est insuffisant pour effectuer cette opération.',
-    //           reference || data.transaction_id,
-    //           ''
-    //         );
-    //       } 
-    //       else if (data.reason ==="PAYER_NOT_FOUND" || data.reason ==="PAYER NOT FOUND") {
-    //         // Clear interval and handle failure
-    //         clearInterval(pollInterval);
-            
-    //         // Reset the payment button
-    //         if (payBtn) {
-    //           payBtn.textContent = 'Payer';
-    //           payBtn.disabled = false;
-    //         }
-            
-            
-    //         FeexPayButton.handlePaymentFailureCleanup(); // Close iframe/modal
-    //         // Show result modal with failure message
-    //         FeexPayButton.showResultModal(
-    //           'FAILED',
-    //           'Veuillez bien vérifier le numéro de téléphone et le réseau selectionné',
-    //           reference || data.transaction_id || data.orderId,
-    //           ''
-    //         );
-    //       } 
-    //       else if (data.status === 'FAILED' || data.status === 'CANCELLED') {
-    //         // Clear interval and handle failure
-    //         clearInterval(pollInterval);
-            
-    //         // Reset the payment button
-    //         if (payBtn) {
-    //           payBtn.textContent = 'Payer';
-    //           payBtn.disabled = false;
-    //         }
-            
-    //         FeexPayButton.handlePaymentFailureCleanup(); // Close iframe/modal
-    //         // Show result modal with failure message
-    //         FeexPayButton.showResultModal(
-    //           'FAILED',
-    //           'Le paiement a échoué ou a été annulé.',
-    //           reference || data.transaction_id || data.orderId,
-    //           ''
-    //         );
-    //       } 
-    //       else if (pollCount >= maxPolls) {
-    //         // Timeout after max polls
-    //         clearInterval(pollInterval);
-            
-    //         FeexPayButton.handlePaymentFailureCleanup(); // Close iframe/modal
-    //         // Show result modal with timeout message
-    //         FeexPayButton.showResultModal(
-    //           'FAILED',
-    //           'La vérification du paiement a expiré. Veuillez réessayer.',
-    //           reference || data.transaction_id || data.orderId,
-    //           ''
-    //         );
-    //       } else {
-    //         // Update button text to show we're still checking
-    //         if (payBtn) {
-    //           payBtn.innerHTML = '<span class="feexpay-loading-spinner"></span> ';
-    //         }
-    //       }
-    //     })
-    //     .catch(error => {
-    //       // Clear interval on error
-    //       clearInterval(pollInterval);
-    //       // console.error('FeexPay: Error checking transaction status', error);
-          
-    //       FeexPayButton.handlePaymentFailureCleanup(); // Close iframe/modal
-    //       // Show result modal with error message
-    //       FeexPayButton.showResultModal(
-    //         'FAILED',
-    //         'Une erreur est survenue lors de la vérification du paiement.',
-    //         reference || data.transaction_id || data.orderId,
-    //         ''
-    //       );
-    //     });
-    //   }, 10000); // Poll every 10 seconds
-    // },
-
+  
     pollTransactionStatus: function(reference, payBtn, paymentData) {
       let pollCount = 0;
-      const maxPolls = 18; // 3 minutes
+      const maxPolls = 18; // 4,75 minutes
     
       const pollInterval = setInterval(() => {
         pollCount++;
     
-        fetch(`${FeexPayConfig.baseUrl}/api/transactions/getrequesttopay/integration/${reference}`, {
+        fetch(`${FeexPayConfig.baseUrl}/api/transactions/public/single/status/${reference}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${FeexPayConfig.options.token}`
@@ -2614,7 +2359,7 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
         });
         
     
-      }, 10000); // 10 secondes
+      }, 15000); // 15 secondes
     }
 ,    
     
@@ -2658,7 +2403,7 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       
       // Format the phone number according to the required format
       let country = '';
-      let phoneNumberRight = '';
+    
       
       // Déterminer le code pays en fonction du pays sélectionné
       const walletCountrySelect = document.getElementById('feexpay-wallet-country-select');
@@ -2684,7 +2429,7 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       // }
       
       // Formater le numéro de téléphone pour la partie droite
-      phoneNumberRight = cleanPhone.startsWith('0') ? cleanPhone : '0' + cleanPhone;
+  
       
       // Numéro de téléphone complet avec code pays
       const phoneNumber = country + cleanPhone;
@@ -2701,7 +2446,7 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       const formattedPaymentData = {
         phoneNumber: phoneNumber,
         country: country,
-        phoneNumberRight: phoneNumberRight,
+     
         amount: paymentData.amount.toString(),
         currency: FeexPayConfig.options.currency,
         description: FeexPayConfig.options.description || 'Paiement FeexPay',
@@ -3050,8 +2795,12 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       const emailInput = document.getElementById('feexpay-card-email-input');
       const phoneInput = document.getElementById('feexpay-card-phone-input');
       const cardTypeSelect = document.getElementById('feexpay-card-type');
+      const adressInput = document.getElementById('feexpay-card-adress-input');
+      const cityInput = document.getElementById('feexpay-card-city-input');
+      const zipInput = document.getElementById('feexpay-card-zip-input');
+      const countrySelect = document.getElementById('feexpay-card-country-input');
       
-      if (!firstNameInput || !lastNameInput || !emailInput || !phoneInput || !cardTypeSelect) {
+      if (!firstNameInput || !lastNameInput || !emailInput || !phoneInput || !cardTypeSelect || !adressInput || !cityInput || !zipInput || !countrySelect) {
         console.error('FeexPay: Required card form elements not found');
         return;
       }
@@ -3061,6 +2810,10 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       const email = emailInput.value.trim();
       const phone = phoneInput.value.trim();
       const typeCard = cardTypeSelect.value;
+      const adress = adressInput.value.trim();
+      const city = cityInput.value.trim();
+      const zip = zipInput.value.trim();
+      const country = countrySelect.value;
       
       // Validate inputs
       if (!firstName) {
@@ -3083,6 +2836,26 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
         return;
       }
       
+      if (!adress) {
+        this.showResultModal('REQUIRED', 'Veuillez entrer votre adresse', '');
+        return;
+      }
+      
+      if (!city) {
+        this.showResultModal('REQUIRED', 'Veuillez entrer votre ville', '');
+        return;
+      }
+      
+      if (!zip) {
+        this.showResultModal('REQUIRED', 'Veuillez entrer votre code postal', '');
+        return;
+      }
+      
+      if (!country) {
+        this.showResultModal('REQUIRED', 'Veuillez sélectionner votre pays', '');
+        return;
+      }
+      
       // Get the pay button reference
       const payBtn = document.getElementById('feexpay-pay-btn');
       
@@ -3101,20 +2874,24 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       
       // Prepare payment data
       const paymentData = {
-        amount: FeexPayConfig.options.amount,
-        phone: cleanPhone,
         shop: FeexPayConfig.options.id,
+        amount: FeexPayConfig.options.amount,
+        currency: FeexPayConfig.options.currency,
         first_name: firstName,
         last_name: lastName,
         email: email,
-        type_card: typeCard,
-        currency: FeexPayConfig.options.currency,
-        // fee: feeAmount,
-        // total: totalAmount
+        phoneNumber: cleanPhone,
+        adress: adress,
+        city: city, 
+        zip: zip,
+        country: country,
+        receiptUrl:FeexPayConfig.options.callback_url,
+        type_card: typeCard
       };
       
       // Make API request to process card payment
-      fetch(`${FeexPayConfig.baseUrl}/api/transactions/public/initcard`, {
+      
+      fetch(`${FeexPayConfig.baseUrl}/api/transactions/public/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -3129,23 +2906,13 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
           payBtn.textContent = 'Payer';
           payBtn.disabled = false;
         }
-        
-        // Check response
-        if (data.status === 'SUCCESSFUL' || data.status === 200 || data.status === 'SUCCESS') {
-          // Reset callback flag for new transaction
-          FeexPayConfig.callbackCalled = false;
+
+        // Redirect to payment page if paymentUrl is provided
+        if (data.paymentUrl) {
+          window.location.href = data.paymentUrl;
           
-          // Redirect to payment page if URL is provided
-          if (data.url) {
-            window.location.href = data.url;
-          } else {
-            this.showResultModal(
-              'SUCCESSFUL',
-              data.message || 'Votre paiement a été initié avec succès. Vous allez être redirigé vers la page de paiement.',
-              data.reference || ''
-            );
-          }
-        } else {
+        } 
+        else {
           // Show error
           this.showResultModal(
             'FAILED',
@@ -3388,156 +3155,7 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
      * @param {HTMLElement} payBtn - Payment button element
      * @param {Object} paymentData - Original payment data
      */
-    // pollWaveTransactionStatus: function(reference, payBtn, paymentData) {
-    //   // Create a counter for polling attempts
-    //   let pollCount = 0;
-    //   const maxPolls = 18; // 18 fois 10
-      
-    //   // Create polling interval
-    //   const pollInterval = setInterval(() => {
-    //     // Increment poll count
-    //     pollCount++;
-    //     let transaction_id = ''
-    //     // Check transaction status
-    //     fetch(`${FeexPayConfig.baseUrl}/api/transactions/getrequesttopay/integration/${reference}`, {
-    //       method: 'GET',
-    //       headers: {
-    //         'Authorization': `Bearer ${FeexPayConfig.options.token}`
-    //       }
-    //     })
-    //     .then(response => response.json())
-    //     .then(data => {
-    //       // console.log('WAVE polling response:', data);
-    //       transaction_id = data.transaction_id;
-    //       orderId = data.orderId;
-    //       if (data.status === 'SUCCESSFUL' || data.status === 'SUCCESS') {
-    //         // Clear interval and handle success
-    //         clearInterval(pollInterval);
-            
-    //         // Reset the payment button
-    //         if (payBtn) {
-    //           payBtn.textContent = 'Payer';
-    //           payBtn.disabled = false;
-    //         }
-            
-    //         // Show result modal with success message
-    //         this.showResultModal(
-    //           'SUCCESSFUL',
-    //           'Votre paiement a été traité avec succès.',
-    //           data.reference || data.transaction_id || data.orderId
-    //         );
-            
-    //         // Call the callback function if it exists
-        
-    //       } 
-    //       else if (data.reason === "LOW_BALANCE_OR_PAYEE_LIMIT_REACHED_OR_NOT_ALLOWED") {
-    //         // Clear interval and handle failure
-    //         clearInterval(pollInterval);
-            
-    //         // Reset the payment button
-    //         if (payBtn) {
-    //           payBtn.textContent = 'Payer';
-    //           payBtn.disabled = false;
-    //         }
-            
-    //         // Show result modal with failure message
-    //         this.showResultModal(
-    //           'FAILED',
-    //           'Votre solde e  st insuffisant pour effectuer cette opération.',
-    //           reference || data.transaction_id || data.orderId
-    //         );
-            
-          
-    //       } 
-    //       else if (data.reason === "PAYER_NOT_FOUND") {
-    //         // Clear interval and handle failure
-    //         clearInterval(pollInterval);
-            
-    //         // Reset the payment button
-    //         if (payBtn) {
-    //           payBtn.textContent = 'Payer';
-    //           payBtn.disabled = false;
-    //         }
-            
-    //         // Show result modal with failure message
-    //         this.showResultModal(
-    //           'FAILED',
-    //           'Veuillez bien vérifier le numéro de téléphone et le réseau selectionné',
-    //           reference || data.transaction_id || data.orderId
-    //         );
-            
-            
-    //       } 
-    //       else if (data.status === 'FAILED' || data.status === 'CANCELLED') {
-    //         // Clear interval and handle failure
-    //         clearInterval(pollInterval);
-            
-    //         // Reset the payment button
-    //         if (payBtn) {
-    //           payBtn.textContent = 'Payer';
-    //           payBtn.disabled = false;
-    //         }
-            
-    //         // Show result modal with failure message
-    //         this.showResultModal(
-    //           'FAILED',
-    //           'Le paiement a échoué ou a été annulé.',
-    //           reference || data.transaction_id || data.orderId
-    //         );
-            
-    //         // Call the callback function if it exists
-          
-    //       } 
-    //       else if (pollCount >= maxPolls) {
-    //         // Timeout after max polls
-    //         clearInterval(pollInterval);
-            
-    //         // Reset the payment button
-    //         if (payBtn) {
-    //           payBtn.textContent = 'Payer';
-    //           payBtn.disabled = false;
-    //         }
-            
-    //         // Show result modal with timeout message
-    //         this.showResultModal(
-    //           'FAILED',
-    //           'La vérification du paiement a expiré. Veuillez réessayer.',
-    //           reference || data.transaction_id || data.orderId  
-    //         );  
-            
-    //         // Call the callback function if it exists
-          
-    //       } else {
-    //         // Update button text to show we're still checking
-    //         if (payBtn) {
-    //           payBtn.innerHTML = `<span class="feexpay-loading-spinner"></span> Vérification du paiement (${pollCount}/${maxPolls})...`;
-    //         }
-    //       }
-    //     })
-    //     .catch(error => {
-    //       // Clear interval on error
-    //       clearInterval(pollInterval);
-    //       // console.error('FeexPay: Error checking WAVE transaction status', error);
-          
-    //       // Reset the payment button
-    //       if (payBtn) {
-    //         payBtn.textContent = 'Payer';
-    //         payBtn.disabled = false;
-    //       }
-          
-    //       // Show result modal with error message
-    //       this.showResultModal(
-    //         'FAILED',
-    //         'Une erreur est survenue lors de la vérification du paiement.',
-    //         reference || transaction_id || orderId
-    //       );
-          
-    //       // Call the callback function if it exists
-       
-    //     });
-    //   }, 10000); // Poll every 10 seconds
-    // },
-    
+
 
     pollWaveTransactionStatus: function(reference, payBtn, paymentData) {
       let pollCount = 0;
@@ -3548,7 +3166,7 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       const pollInterval = setInterval(() => {
         pollCount++;
     
-        fetch(`${FeexPayConfig.baseUrl}/api/transactions/getrequesttopay/integration/${reference}`, {
+        fetch(`${FeexPayConfig.baseUrl}/api/transactions/public/single/status/${reference}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${FeexPayConfig.options.token}`
@@ -3683,7 +3301,7 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
           }
         });
     
-      }, 10000); // toutes les 10 secondes
+      }, 15000); // toutes les 15 secondes
     },
       
     /**
@@ -3712,7 +3330,7 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       
       // Format the phone number according to the required format
       let country = '';
-      let phoneNumberRight = '';
+   
       
       // Déterminer le code pays en fonction du pays sélectionné
       const walletCountrySelect = document.getElementById('feexpay-wallet-country-select');
@@ -3733,7 +3351,7 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       }
       
       // Formater le numéro de téléphone pour la partie droite
-      phoneNumberRight = cleanPhone.startsWith('0') ? cleanPhone : '0' + cleanPhone;
+      
       
       // Numéro de téléphone complet avec code pays
       const phoneNumber = country + cleanPhone;
@@ -3752,7 +3370,7 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       const formattedPaymentData = {
         phoneNumber: phoneNumber,
         country: country,
-        phoneNumberRight: phoneNumberRight,
+    
         amount: paymentData.amount.toString(),
         currency: FeexPayConfig.options.currency,
         description: FeexPayConfig.options.description || 'Paiement FeexPay',
