@@ -21,34 +21,36 @@
         <div id="render"></div>
 
       
-      
-
-        
+   
         
         
         <!-- Bouton personnalisé -->  
         <!-- <button id="customPayButton" style="background-color: #1d4ed8; color: white; border: none; padding: 12px 20px; border-radius: 6px; font-weight: 500; cursor: pointer;">
           Payer maintenant
-        </button>
-        -->
+        </button> -->
+       
 
-  <script>
+  <script type="module">
+    // import {FEEXPAY_PUBLIC_KEY,FEEXPAY_SHOP_ID_SUPPORTED,FEEXPAY_SHOP_ID_NOT_SUPPORTED }from "./config.js"
     // Initialiser le bouton FeexPay standard
     FeexPayButton.init("render", {
 
-      id: "671a774c706593edb3dc4ab2",// Supporte les frais
-      // id: "679a12dedea4a0b5d416ea87", //Supporte pas les frais
-      // id : "64636ba955d2ed60e9eac0b9",
-      token: "fp_HHNoQGt9Vn8KpZoLaBkG3uEeKpLUYBaHUZIZXJE3Xgv0OKG2tK3A7PtlytctikrJ", 
+      // id: "67039ee09a5a46e953703504",
+// token: "fp_uJsZXJz75CZ0OtJ0RTPKsIK5ivz9XwT2kuobGV0AzU1IfCqU9e4jCRYDzfvVA9te",
+      // id: FEEXPAY_SHOP_ID_SUPPORTED,// Supporte les frais
+      // id: "JDqEQRkEeOYMTyI", //Supporte pas les frais,
+      id:"671a774c706593edb3dc4ab2",
+token :"fp_HHNoQGt9Vn8KpZoLaBkG3uEeKpLUYBaHUZIZXJE3Xgv0OKG2tK3A7PtlytctikrJ"    , 
+      // token: "fp_s17T6V5zuHFC6HpcJKIL15Cn8Id9s4mgrnZEAjpGP7dhSMY18D3zZksD9wxIem47", 
 
 
-      // token :"fp_9jqqsIq8chG71drXD4SklEo6kHB6pjEkE0PYZuESPW49hoVBUyE87pSGH0AEsgkk",
+      // token :"test_9jqqsIq8chG71drXD4SklEo6kHB6pjEkE0PYZuESPW49hoVBUyE87pSGH0AEsgkk",
       
 
   
-      amount: "100",
+      amount: "1000",
       callback: (response) => {
-     if(response.status === "SUCCESSFUL" || response.status === "SUCCESS")  {
+     if(response.status === "SUCCESSFUL" || response.status === "SUCCESS") {
     // window.location.href = "https://feexpay.me";
     console.log("SUCCESSFUL", response);
      }
@@ -58,18 +60,39 @@
        }
       },
       mode: "LIVE",
-      description: "Achat de produit",
+      description: "Achat de produit()",
       custom_id: "123456",
-currency:"XOF",
-      //fields_to_hide: ["email", "name"],
+      currency:"XOF", 
+      // fields_to_hide: ["email", "name"],
       // custom_button:true,
       // id_custom_button: "customPayButton",
-      //callback_url : "https://feexpay.me",
-     // error_callback_url : "https://feexpay.me/error",
-      case : "ALL"
+      // callback_url : "https://feexpay.me",
+      // error_callback_url : "https://feexpay.me/error",
+      case : "",
+  //       networks: {
+  //   "Côte d'Ivoire": ["MTN CI", "ORANGE CI"],
+  //   // "Senegal": ["WAVE SN", "ORANGE SN"],
+  //   // "Benin" :['MTN',"MOOV","CELTIIS"],  
+  //   "Congo-Brazzaville" :['MTN'],
+  //   "Senegal" :['WAVE','ORANGE'],
+    
+  // }
+,
+      callback_info : {
+     description :"ABdias ()",
+     reference : "12345623474747",
+     name :"ADINSI ABDIAS"
+      }
  
      
     });
+
+
+
+    
+    
+
+    
 
   </script>
 </body>
