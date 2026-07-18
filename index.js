@@ -2111,7 +2111,7 @@ if (data?.statusCode === "555") {
       payBtn.innerHTML = '<span class="feexpay-loading-spinner"></span> ';
     }
 
-    let reference = (paymentData.reseau === "MOOV CI" || paymentData.reseau === "FREE SN" || paymentData.reseau === 'ORANGE CI' || paymentData.reseau === 'WAVE CI' || paymentData.reseau === 'ORANGE BF' || paymentData.reseau === 'MOOV BF' || paymentData.reseau === 'WAVE SN' || paymentData.reseau === 'ORANGE SN') ? data.order_id : data.reference;
+    let reference = (paymentData.reseau === "MOOV CI" || paymentData.reseau === "FREE SN" || paymentData.reseau === 'ORANGE CI' || paymentData.reseau === 'WAVE CI' || paymentData.reseau === 'ORANGE BF' || paymentData.reseau === 'MOOV BF' || paymentData.reseau === 'WAVE SN' || paymentData.reseau === 'ORANGE SN') ? data.reference : data.reference;
     
   
     // Start polling for transaction status
