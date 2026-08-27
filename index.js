@@ -2057,7 +2057,7 @@ fetch(`${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`, {
     }
 
 
-if ((paymentData.reseau === "WAVE CI" && data?.payment_url) || (paymentData.reseau === "WAVE SN" && data?.payment_url)) {
+if ((paymentData.reseau === "WAVE CI" && data?.payment_url) || (paymentData.reseau === "WAVE SN" && data?.payment_url)  || (paymentData.reseau === "ORANGE CI" && data?.payment_url)  || (paymentData.reseau === "ORANGE SN" && data?.payment_url)) {
   window.open(data?.payment_url, '_blank');
 }
 
