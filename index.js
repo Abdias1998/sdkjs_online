@@ -59,6 +59,11 @@
       'ORANGE': 'orange ml',
       'MOBICASH': 'mobicash ml'
     },
+    'Ghana': {
+      'MTN': 'mtn gh',
+      'AIRTEL': 'airtel gh',
+      'VODAFONE': 'vodafone gh'
+    },
   };
   
   // Define networks that require OTP
@@ -395,6 +400,7 @@
         { value: 'Senegal', label: '🇸🇳 Senegal' },
         { value: 'Congo-Brazzaville', label: '🇨🇬 Congo-Brazzaville' },
         { value: 'Mali', label: '🇲🇱 Mali' },
+        { value: 'Ghana', label: '🇬🇭 Ghana' },
       ];
       const allowedNetworks = FeexPayConfig.options.networks;
       const visibleCountries = allowedNetworks
@@ -421,7 +427,7 @@
             <div style="margin-bottom: 16px; text-align: left;">
               <div style="display: flex; align-items: center; justify-content: space-between;">
                 <span style="font-size: 20px; font-weight: bold;">
-                  <img src="https://api.feexpay.me/api/static/feexpay_logo-h.png" alt="FeexPay" style="width: 120px;">
+                  <img src="https://feexpay.me/_next/static/media/logo.65cc21ed.svg" alt="FeexPay" style="width: 120px;">
                 </span>
                 ${FeexPayConfig.merchantInfo ? `
                   <div style="text-align: right; font-size: 12px; padding: 12px">
@@ -940,7 +946,8 @@
         'Burkina Faso': ['ORANGE', 'MOOV'],
         'Senegal': ['ORANGE', 'FREE MONEY', 'WAVE'],
         'Congo-Brazzaville': ['MTN'],
-        'Mali': ['ORANGE', 'MOBICASH']
+        'Mali': ['ORANGE', 'MOBICASH'],
+        'Ghana': ['MTN', 'AIRTEL', 'VODAFONE']
       };
       
       // Use the globally defined networkApiIds and networksRequiringOtp
@@ -978,6 +985,11 @@
         'Mali': {
           'ORANGE': 0.030,
           'MOBICASH': 0.0325
+        },
+        'Ghana': {
+          'MTN': 0.025,
+          'AIRTEL': 0.025,
+          'VODAFONE': 0.025
         }
       };
       
@@ -989,7 +1001,8 @@
         'Burkina Faso': '+226',
         'Senegal': '+221',
         'Congo-Brazzaville': '+242',
-        'Mali': '+223'
+        'Mali': '+223',
+        'Ghana': '+233'
       };
       
       // Function to update network options, country code, and fee information
@@ -1272,7 +1285,13 @@
       const toggleOtpField = (country, network) => {
         const otpField = document.getElementById('feexpay-otp-field');
         if (otpField) {
-          otpField.style.display = 'none';
+          if (country === 'Burkina Faso' && network === 'ORANGE') {
+            const otpHint = otpField.querySelector('p');
+            if (otpHint) otpHint.textContent = "Code Otp";
+            otpField.style.display = 'block';
+          } else {
+            otpField.style.display = 'none';
+          }
         }
       };
       
@@ -1851,7 +1870,8 @@ processPayment: async function() {
       'Burkina Faso': '+226',
       'Senegal': '+221',
       'Congo-Brazzaville': '+242',
-      'Mali': '+223'
+      'Mali': '+223',
+      'Ghana': '+233'
     };
     countryCode = countryCodes[country]?.replace('+', '') || '';
   }
@@ -1860,7 +1880,7 @@ processPayment: async function() {
   const otpInput = document.getElementById('feexpay-otp-input');
   const fullName = nameInput ? nameInput.value.trim() : '';
   const email = emailInput ? emailInput.value.trim() : '';
-  const otp = '';
+  const otp = otpInput ? otpInput.value.trim() : '';
 
   let cleanPhone = phone.replace(/\D/g, ''); // Retire tous les caractères non numériques
 
@@ -2057,34 +2077,9 @@ fetch(`${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`, {
     }
 
 
-if ((paymentData.reseau === "WAVE CI" && data?.payment_url) || (paymentData.reseau === "WAVE SN" && data?.payment_url)  || (paymentData.reseau === "ORANGE CI" && data?.payment_url)  || (paymentData.reseau === "ORANGE SN" && data?.payment_url)) {
-  window.open(data?.payment_url, '_blank');
-}
-
-if (paymentData.reseau === "ORANGE SN" && data?.payment_url) {
-  const iframeContainer = document.createElement('div');
-  iframeContainer.style.position = 'fixed';
-  iframeContainer.style.top = '0';
-  iframeContainer.style.left = '0';
-  iframeContainer.style.width = '100vw';
-  iframeContainer.style.height = '100vh';
-  iframeContainer.style.zIndex = '100000';
-  iframeContainer.style.backgroundColor = '#fff';
-  iframeContainer.style.margin = '0';
-  iframeContainer.style.padding = '0';
-  iframeContainer.style.overflow = 'hidden';
-  
-  const iframe = document.createElement('iframe');
-  iframe.src = data?.payment_url;
-  iframe.width = '100%';
-  iframe.height = '100%';
-  iframe.frameBorder = '0';
-  iframe.style.border = 'none';
-  iframe.style.overflow = 'hidden';
-  iframe.style.display = 'block';
-  
-  iframeContainer.appendChild(iframe);
-  document.body.appendChild(iframeContainer);
+const networksWithPaymentLink = ["ORANGE BF", "WAVE CI", "ORANGE CI", "ORANGE SN", "WAVE SN"];
+if (networksWithPaymentLink.includes(paymentData.reseau) && data?.payment_url) {
+  window.location.href = data.payment_url;
 }
 
 
@@ -2111,7 +2106,7 @@ if (data?.statusCode === "555") {
       payBtn.innerHTML = '<span class="feexpay-loading-spinner"></span> ';
     }
 
-    let reference = (paymentData.reseau === "MOOV CI" || paymentData.reseau === "FREE SN" || paymentData.reseau === 'ORANGE CI' || paymentData.reseau === 'WAVE CI' || paymentData.reseau === 'ORANGE BF' || paymentData.reseau === 'MOOV BF' || paymentData.reseau === 'WAVE SN' || paymentData.reseau === 'ORANGE SN') ? data.reference : data.reference;
+    let reference = data.reference;
     
   
     // Start polling for transaction status
@@ -3062,6 +3057,12 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
       } else if (country === 'Côte d\'Ivoire' && provider === 'WAVE') {
         apiEndpoint = `${FeexPayConfig.baseUrl}/api/transactions/public/init`;
         networkApiId = 'wave_ci';
+      } else if (country === 'Senegal' && provider === 'WAVE') {
+        apiEndpoint = `${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`;
+        networkApiId = 'wave sn';
+      } else if (country === 'Burkina Faso' && provider === 'WAVE') {
+        apiEndpoint = `${FeexPayConfig.baseUrl}/api/transactions/requesttopay/integration`;
+        networkApiId = 'wave bf';
       } else {
         // Reset button state
         if (payBtn) {
@@ -3113,6 +3114,10 @@ else if (FeexPayConfig.options.mode === "SANDBOX" && FeexPayConfig.options.token
         networkApiId = 'coris';
       } else if (country === 'Côte d\'Ivoire' && provider === 'WAVE') {
         networkApiId = 'wave_ci';
+      } else if (country === 'Senegal' && provider === 'WAVE') {
+        networkApiId = 'wave sn';
+      } else if (country === 'Burkina Faso' && provider === 'WAVE') {
+        networkApiId = 'wave bf';
       } else {
         // Reset button state
         if (payBtn) {
